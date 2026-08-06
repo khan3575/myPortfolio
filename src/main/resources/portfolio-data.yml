@@ -1,0 +1,96 @@
+portfolio:
+  hero:
+    name: "Sakib Khan"
+    title: "Java Backend Developer | Spring Boot, Spring Security"
+    status: "Open to Software Engineer opportunities"
+    ctas:
+      - label: "View Projects"
+        href: "#projects"
+      - label: "Resume"
+        href: "/resume"
+      - label: "Contact"
+        href: "#contact"
+
+  about:
+    pitch: >
+      Java backend developer focused on Spring Boot, Spring Security, and REST APIs.
+      Currently completing structured onboarding at Sonali Intellect Limited, working
+      across legacy (Servlets, JSP, JSTL, JSF) and modern (Spring Boot, Thymeleaf) Java
+      web stacks used on the company's banking platform.
+    highlights:
+      - "Built and deployed central-auth, a live OAuth2/OIDC authentication microservice"
+      - "Codeforces Pupil, ICPC Asia Dhaka Regional 2025 (ranked 103rd nationally)"
+      - "B.Sc. Computer Science and Engineering, BUBT (CGPA 3.81)"
+
+  skills:
+    categories:
+      - name: "Languages & Frameworks"
+        items: ["Java", "Spring Boot", "Spring Security", "Spring Data JPA", "Thymeleaf", "C++"]
+      - name: "Data & APIs"
+        items: ["MySQL", "PostgreSQL", "H2", "Flyway", "REST APIs", "OpenAPI/Swagger"]
+      - name: "Tools"
+        items: ["Git", "Docker", "Maven", "Gradle", "nginx", "Linux"]
+
+  experience:
+    - role: "Java Intern"
+      company: "Sonali Intellect Limited"
+      location: "Dhaka, Bangladesh"
+      start: "2026-03"
+      end: null
+      bullets:
+        - "Completing structured onboarding across the Java web stack used on the company's banking platform -- legacy (Servlets, JSP, JSTL, JSF) and modern (Spring Boot, Thymeleaf) -- plus JDBC/JNDI data access and MVC architecture."
+        - "Building proficiency in OOP design, centralized logging, and aspect-oriented programming (AOP) for cross-cutting concerns, within version-controlled Git workflows."
+        - "Deploying applications on Apache Tomcat, including manual JAR/dependency management; applied these skills by building a task management system and an asset tagging system."
+    - role: "Teaching Assistant"
+      company: "Bangladesh University of Business and Technology"
+      location: "Dhaka, Bangladesh"
+      start: "2025-01"
+      end: "2026-01"
+      bullets:
+        - "Supported undergraduate courses in Computer Networks, Object-Oriented Programming, and Web Database."
+
+  education:
+    - degree: "B.Sc. in Computer Science and Engineering"
+      institution: "Bangladesh University of Business and Technology (BUBT)"
+      location: "Dhaka, Bangladesh"
+      start: "2022-01"
+      end: "2025-12"
+      detail: "CGPA 3.81. Core coursework: Database Management Systems, Software Engineering, Object-Oriented Programming (Java), Web Database."
+
+  certifications:
+    - name: "Spring Boot 4, Spring 7 & Hibernate for Beginners"
+      issuer: "Udemy — Chad Darby"
+      credentialId: "UC-904cf6fb-22b0-4ae2-85ee-8279b6caa392"
+
+  awards:
+    - name: "ICPC Asia Dhaka Regional Contest 2025"
+      detail: "Ranked 103rd nationally (BUBT)"
+    - name: "UAP Collaborative Contest 2025"
+      detail: "2nd Place (University of Asia Pacific)"
+    - name: "Codeforces"
+      detail: "Pupil — 500+ problems solved"
+    - name: "CodeChef"
+      detail: "2 Star — 100+ problems solved"
+    - name: "BUBT Intra University Programming Contest"
+      detail: "4th position, Senior Division"
+
+  socials:
+    github: "https://github.com/khan3575"
+    linkedin: "https://linkedin.com/in/khan3575"
+    email: "saakibkhaan290@gmail.com"
+
+  # Used only when the GitHub API is unreachable or rate-limited (see GitHubProjectService).
+  # Kept intentionally small -- this is a safety net, not the primary content path.
+  projectsFallback:
+    - name: "central-auth"
+      description: "OAuth2/OIDC authentication microservice — Spring Boot, Spring Security, JPA, Flyway"
+      url: "https://github.com/khan3575/central-auth"
+      language: "Java"
+    - name: "Asset-Tagging-System"
+      description: "Java/Spring Boot system for tracking and tagging physical assets"
+      url: "https://github.com/khan3575/Asset-Tagging-System"
+      language: "Java"
+    - name: "dsa-practice"
+      description: "Consolidated DSA & competitive programming practice (LeetCode, NeetCode, Codeforces, CSES, ICPC prep)"
+      url: "https://github.com/khan3575/dsa-practice"
+      language: "C++"
