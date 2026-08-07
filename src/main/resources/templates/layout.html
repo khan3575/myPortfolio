@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<header class="site-header" th:fragment="header(name)">
+    <div class="container">
+        <a href="/"><strong th:text="${name}">Portfolio</strong></a>
+        <nav class="site-nav">
+            <a href="/">Home</a>
+            <a href="/blog">Blog</a>
+            <a href="/#contact">Contact</a>
+            <a sec:authorize="isAuthenticated()" href="/admin">Admin</a>
+        </nav>
+    </div>
+</header>
+
+<footer class="site-footer" th:fragment="footer">
+    <div class="container">
+        &copy; <span th:text="${#dates.year(#dates.createNow())}">2026</span> Sakib Khan
+    </div>
+</footer>
+
+</body>
+</html>

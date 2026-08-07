@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${post.id == null ? 'New post' : 'Edit post'}">Post</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div th:replace="~{layout :: header('Sakib Khan')}"></div>
+
+<main class="container">
+    <h1 th:text="${post.id == null ? 'New post' : 'Edit post'}">Post</h1>
+
+    <p class="error-text" th:if="${error}" th:text="${error}">Error</p>
+
+    <form class="stacked" th:action="@{${formAction}}" th:object="${post}" method="post">
+        <label>
+            Title
+            <input type="text" th:field="*{title}">
+        </label>
+        <label>
+            Slug
+            <input type="text" th:field="*{slug}" placeholder="auto-generated from title if left blank">
+        </label>
+        <label>
+            Summary
+            <input type="text" th:field="*{summary}" maxlength="500">
+        </label>
+        <label>
+            Content (Markdown)
+            <textarea th:field="*{contentMarkdown}"></textarea>
+        </label>
+        <button type="submit">Save</button>
+    </form>
+
+    <p><a href="/admin">&larr; Back to posts</a></p>
+</main>
+
+<div th:replace="~{layout :: footer}"></div>
+
+</body>
+</html>

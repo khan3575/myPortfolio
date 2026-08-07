@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${post.title + ' — Sakib Khan'}">Post</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div th:replace="~{layout :: header('Sakib Khan')}"></div>
+
+<main class="container">
+    <h1 th:text="${post.title}">Title</h1>
+    <p class="meta" th:text="${#temporals.format(post.publishedAt, 'MMMM d, yyyy')}">Date</p>
+
+    <div class="post-body" th:utext="${contentHtml}">Content</div>
+
+    <p><a href="/blog">&larr; Back to blog</a></p>
+</main>
+
+<div th:replace="~{layout :: footer}"></div>
+
+</body>
+</html>

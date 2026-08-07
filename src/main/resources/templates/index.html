@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${hero.name() + ' — ' + hero.title()}">Portfolio</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div th:replace="~{layout :: header(${hero.name()})}"></div>
+
+<main>
+    <section class="hero container">
+        <h1 th:text="${hero.name()}">Name</h1>
+        <p th:text="${hero.title()}">Title</p>
+        <span class="status" th:text="${hero.status()}">Status</span>
+        <div class="cta-group">
+            <a th:each="cta : ${hero.ctas()}" th:href="${cta.href()}" th:text="${cta.label()}">CTA</a>
+        </div>
+    </section>
+
+    <section id="about" class="container">
+        <h2 class="section-title">About</h2>
+        <p th:text="${about.pitch()}">Pitch</p>
+        <ul>
+            <li th:each="highlight : ${about.highlights()}" th:text="${highlight}">Highlight</li>
+        </ul>
+    </section>
+
+    <section id="skills" class="container">
+        <h2 class="section-title">Skills</h2>
+        <div class="grid">
+            <div class="card" th:each="category : ${skills.categories()}">
+                <h3 th:text="${category.name()}">Category</h3>
+                <div class="tag-list">
+                    <span class="tag" th:each="item : ${category.items()}" th:text="${item}">Item</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="container">
+        <h2 class="section-title">Experience</h2>
+        <div class="timeline-item" th:each="job : ${experience}">
+            <h3 th:text="${job.role() + ' · ' + job.company()}">Role · Company</h3>
+            <p class="meta" th:text="${job.location() + ' — ' + job.start() + ' to ' + (job.end() ?: 'Present')}">Location — dates</p>
+            <ul>
+                <li th:each="bullet : ${job.bullets()}" th:text="${bullet}">Bullet</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="projects" class="container">
+        <h2 class="section-title">Projects</h2>
+        <div class="grid">
+            <div class="card" th:each="project : ${projects}">
+                <h3><a th:href="${project.url()}" th:text="${project.name()}">Project</a></h3>
+                <p th:text="${project.description()}">Description</p>
+                <span class="tag" th:if="${project.language()}" th:text="${project.language()}">Language</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="education" class="container">
+        <h2 class="section-title">Education</h2>
+        <div class="timeline-item" th:each="edu : ${education}">
+            <h3 th:text="${edu.degree()}">Degree</h3>
+            <p class="meta" th:text="${edu.institution() + ' — ' + edu.location()}">Institution — Location</p>
+            <p class="meta" th:text="${edu.start() + ' to ' + edu.end()}">Dates</p>
+            <p th:text="${edu.detail()}">Detail</p>
+        </div>
+    </section>
+
+    <section id="certifications" class="container">
+        <h2 class="section-title">Certifications</h2>
+        <ul>
+            <li th:each="cert : ${certifications}" th:text="${cert.name() + ' — ' + cert.issuer()}">Cert</li>
+        </ul>
+    </section>
+
+    <section id="awards" class="container">
+        <h2 class="section-title">Awards</h2>
+        <ul>
+            <li th:each="award : ${awards}" th:text="${award.name() + ' — ' + award.detail()}">Award</li>
+        </ul>
+    </section>
+
+    <section id="blog" class="container" th:if="${not #lists.isEmpty(recentPosts)}">
+        <h2 class="section-title">Latest posts</h2>
+        <div class="grid">
+            <div class="card" th:each="post : ${recentPosts}">
+                <h3><a th:href="@{'/blog/' + ${post.slug}}" th:text="${post.title}">Title</a></h3>
+                <p th:text="${post.summary}">Summary</p>
+            </div>
+        </div>
+        <p><a href="/blog">All posts &rarr;</a></p>
+    </section>
+
+    <section id="contact" class="container">
+        <h2 class="section-title">Contact</h2>
+        <p>
+            <a th:href="'mailto:' + ${socials.email()}" th:text="${socials.email()}">email</a> ·
+            <a th:href="${socials.github()}">GitHub</a> ·
+            <a th:href="${socials.linkedin()}">LinkedIn</a>
+        </p>
+    </section>
+</main>
+
+<div th:replace="~{layout :: footer}"></div>
+
+</body>
+</html>
