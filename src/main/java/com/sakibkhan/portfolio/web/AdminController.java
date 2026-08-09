@@ -41,12 +41,8 @@ public class AdminController {
 
     @PostMapping("/posts")
     public String create(@ModelAttribute Post post, Model model) {
-        if (post.getTitle() == null || post.getTitle().isBlank()
-                || post.getContentMarkdown() == null || post.getContentMarkdown().isBlank()) {
-            model.addAttribute("post", post);
-            model.addAttribute("formAction", "/admin/posts");
-            model.addAttribute("error", "Title and content are required.");
-            return "admin/post-form";
+        if (!isValid(post)) {
+            return invalidForm(post, "/admin/posts", model);
         }
         postAdminService.create(post);
         return "redirect:/admin";
@@ -63,12 +59,8 @@ public class AdminController {
 
     @PostMapping("/posts/{id}")
     public String update(@PathVariable Long id, @ModelAttribute Post post, Model model) {
-        if (post.getTitle() == null || post.getTitle().isBlank()
-                || post.getContentMarkdown() == null || post.getContentMarkdown().isBlank()) {
-            model.addAttribute("post", post);
-            model.addAttribute("formAction", "/admin/posts/" + id);
-            model.addAttribute("error", "Title and content are required.");
-            return "admin/post-form";
+        if (!isValid(post)) {
+            return invalidForm(post, "/admin/posts/" + id, model);
         }
         postAdminService.update(id, post);
         return "redirect:/admin";
@@ -98,5 +90,17 @@ public class AdminController {
     public String delete(@PathVariable Long id) {
         postAdminService.delete(id);
         return "redirect:/admin";
+    }
+
+    private boolean isValid(Post post) {
+        return post.getTitle() != null && !post.getTitle().isBlank()
+                && post.getContentMarkdown() != null && !post.getContentMarkdown().isBlank();
+    }
+
+    private String invalidForm(Post post, String formAction, Model model) {
+        model.addAttribute("post", post);
+        model.addAttribute("formAction", formAction);
+        model.addAttribute("error", "Title and content are required.");
+        return "admin/post-form";
     }
 }

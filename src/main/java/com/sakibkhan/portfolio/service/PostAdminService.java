@@ -3,12 +3,20 @@ package com.sakibkhan.portfolio.service;
 import com.sakibkhan.portfolio.model.Post;
 import com.sakibkhan.portfolio.model.PostStatus;
 import com.sakibkhan.portfolio.repository.PostRepository;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 
 @Service
 public class PostAdminService {
+
+    // Bounded so a persistently-taken base slug can't loop forever; five
+    // collisions in a row on a single-admin blog would mean something else
+    // is wrong.
+    private static final int MAX_SLUG_ATTEMPTS = 5;
 
     private final PostRepository postRepository;
 
@@ -18,25 +26,29 @@ public class PostAdminService {
 
     public Post create(Post post) {
         post.setId(null);
-        post.setSlug(resolveSlug(post));
-        return postRepository.save(post);
+        String base = (post.getSlug() != null && !post.getSlug().isBlank())
+                ? slugify(post.getSlug())
+                : slugify(post.getTitle());
+        return saveWithUniqueSlug(post, base);
     }
 
     public Post update(Long id, Post form) {
-        Post existing = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found: " + id));
+        Post existing = findOrNotFound(id);
         existing.setTitle(form.getTitle());
         existing.setSummary(form.getSummary());
         existing.setContentMarkdown(form.getContentMarkdown());
-        if (form.getSlug() != null && !form.getSlug().isBlank() && !form.getSlug().equals(existing.getSlug())) {
-            existing.setSlug(dedupeSlug(slugify(form.getSlug()), existing.getId()));
+
+        if (form.getSlug() != null && !form.getSlug().isBlank()) {
+            String base = slugify(form.getSlug());
+            if (!base.equals(existing.getSlug())) {
+                return saveWithUniqueSlug(existing, base);
+            }
         }
         return postRepository.save(existing);
     }
 
     public void publish(Long id) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found: " + id));
+        Post post = findOrNotFound(id);
         post.setStatus(PostStatus.PUBLISHED);
         if (post.getPublishedAt() == null) {
             post.setPublishedAt(LocalDateTime.now());
@@ -45,36 +57,46 @@ public class PostAdminService {
     }
 
     public void unpublish(Long id) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found: " + id));
+        Post post = findOrNotFound(id);
         post.setStatus(PostStatus.DRAFT);
         postRepository.save(post);
     }
 
     public void delete(Long id) {
+        if (!postRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         postRepository.deleteById(id);
     }
 
-    private String resolveSlug(Post post) {
-        String base = (post.getSlug() != null && !post.getSlug().isBlank())
-                ? slugify(post.getSlug())
-                : slugify(post.getTitle());
-        return dedupeSlug(base, null);
+    private Post findOrNotFound(Long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    private String dedupeSlug(String base, Long ignoreId) {
+    /**
+     * Saves with a slug derived from {@code base}, retrying with an
+     * incremented suffix on a unique-constraint conflict. The earlier
+     * check-then-save approach (look up "is this slug taken?", then save
+     * separately) raced under concurrent creates of the same title -- two
+     * requests could both see the slug as free before either had saved.
+     * Retrying on the save's own {@link DataIntegrityViolationException}
+     * closes that window: the database's unique constraint is the actual
+     * source of truth, not a query that can go stale between check and
+     * write.
+     */
+    private Post saveWithUniqueSlug(Post post, String base) {
         String candidate = base;
         int suffix = 2;
-        while (slugTaken(candidate, ignoreId)) {
-            candidate = base + "-" + suffix++;
+        for (int attempt = 0; attempt < MAX_SLUG_ATTEMPTS; attempt++) {
+            post.setSlug(candidate);
+            try {
+                return postRepository.saveAndFlush(post);
+            } catch (DataIntegrityViolationException e) {
+                candidate = base + "-" + suffix++;
+            }
         }
-        return candidate;
-    }
-
-    private boolean slugTaken(String slug, Long ignoreId) {
-        return postRepository.findBySlug(slug)
-                .map(existing -> !existing.getId().equals(ignoreId))
-                .orElse(false);
+        throw new IllegalStateException("Could not generate a unique slug for: " + base);
     }
 
     private String slugify(String input) {

@@ -2,6 +2,7 @@ package com.sakibkhan.portfolio.repository;
 
 import com.sakibkhan.portfolio.model.Post;
 import com.sakibkhan.portfolio.model.PostStatus;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,6 +12,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     /** Public blog list — published posts only, newest first. */
     List<Post> findByStatusOrderByPublishedAtDesc(PostStatus status);
+
+    /** Homepage preview — same query, but limited at the database rather than in Java. */
+    List<Post> findByStatusOrderByPublishedAtDesc(PostStatus status, Pageable pageable);
 
     /** Public post detail — a draft's slug must not resolve for a visitor. */
     Optional<Post> findBySlugAndStatus(String slug, PostStatus status);

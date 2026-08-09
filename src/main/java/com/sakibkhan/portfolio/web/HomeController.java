@@ -4,6 +4,7 @@ import com.sakibkhan.portfolio.config.PortfolioProperties;
 import com.sakibkhan.portfolio.model.PostStatus;
 import com.sakibkhan.portfolio.repository.PostRepository;
 import com.sakibkhan.portfolio.service.GitHubProjectService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,10 +40,8 @@ public class HomeController {
         model.addAttribute("socials", portfolioProperties.socials());
         model.addAttribute("projects", gitHubProjectService.getProjects());
 
-        var recentPosts = postRepository.findByStatusOrderByPublishedAtDesc(PostStatus.PUBLISHED)
-                .stream()
-                .limit(BLOG_PREVIEW_COUNT)
-                .toList();
+        var recentPosts = postRepository.findByStatusOrderByPublishedAtDesc(
+                PostStatus.PUBLISHED, PageRequest.of(0, BLOG_PREVIEW_COUNT));
         model.addAttribute("recentPosts", recentPosts);
 
         return "index";
