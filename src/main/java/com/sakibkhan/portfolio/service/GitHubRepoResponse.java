@@ -8,6 +8,5 @@ public record GitHubRepoResponse(
         String name,
         String description,
         @JsonProperty("html_url") String htmlUrl,
-        String language,
-        boolean fork
+        String language
 ) {}

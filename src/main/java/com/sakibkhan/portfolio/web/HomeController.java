@@ -3,7 +3,7 @@ package com.sakibkhan.portfolio.web;
 import com.sakibkhan.portfolio.config.PortfolioProperties;
 import com.sakibkhan.portfolio.model.PostStatus;
 import com.sakibkhan.portfolio.repository.PostRepository;
-import com.sakibkhan.portfolio.service.GitHubProjectService;
+import com.sakibkhan.portfolio.repository.ProjectRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,16 +15,16 @@ public class HomeController {
     private static final int BLOG_PREVIEW_COUNT = 3;
 
     private final PortfolioProperties portfolioProperties;
-    private final GitHubProjectService gitHubProjectService;
+    private final ProjectRepository projectRepository;
     private final PostRepository postRepository;
 
     public HomeController(
             PortfolioProperties portfolioProperties,
-            GitHubProjectService gitHubProjectService,
+            ProjectRepository projectRepository,
             PostRepository postRepository
     ) {
         this.portfolioProperties = portfolioProperties;
-        this.gitHubProjectService = gitHubProjectService;
+        this.projectRepository = projectRepository;
         this.postRepository = postRepository;
     }
 
@@ -37,8 +37,9 @@ public class HomeController {
         model.addAttribute("education", portfolioProperties.education());
         model.addAttribute("certifications", portfolioProperties.certifications());
         model.addAttribute("awards", portfolioProperties.awards());
+        model.addAttribute("codingProfiles", portfolioProperties.codingProfiles());
         model.addAttribute("socials", portfolioProperties.socials());
-        model.addAttribute("projects", gitHubProjectService.getProjects());
+        model.addAttribute("projects", projectRepository.findAllByOrderByCreatedAtDesc());
 
         var recentPosts = postRepository.findByStatusOrderByPublishedAtDesc(
                 PostStatus.PUBLISHED, PageRequest.of(0, BLOG_PREVIEW_COUNT));

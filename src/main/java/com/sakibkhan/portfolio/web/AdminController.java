@@ -2,7 +2,9 @@ package com.sakibkhan.portfolio.web;
 
 import com.sakibkhan.portfolio.model.Post;
 import com.sakibkhan.portfolio.repository.PostRepository;
+import com.sakibkhan.portfolio.repository.ProjectRepository;
 import com.sakibkhan.portfolio.service.PostAdminService;
+import com.sakibkhan.portfolio.service.ProjectAdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +17,19 @@ public class AdminController {
 
     private final PostRepository postRepository;
     private final PostAdminService postAdminService;
+    private final ProjectRepository projectRepository;
+    private final ProjectAdminService projectAdminService;
 
-    public AdminController(PostRepository postRepository, PostAdminService postAdminService) {
+    public AdminController(
+            PostRepository postRepository,
+            PostAdminService postAdminService,
+            ProjectRepository projectRepository,
+            ProjectAdminService projectAdminService
+    ) {
         this.postRepository = postRepository;
         this.postAdminService = postAdminService;
+        this.projectRepository = projectRepository;
+        this.projectAdminService = projectAdminService;
     }
 
     @GetMapping("/login")
@@ -29,6 +40,56 @@ public class AdminController {
     @GetMapping
     public String dashboard(Model model) {
         model.addAttribute("posts", postRepository.findAllByOrderByCreatedAtDesc());
+        model.addAttribute("projects", projectRepository.findAllByOrderByCreatedAtDesc());
+        return "admin/dashboard";
+    }
+
+    @PostMapping("/projects/github")
+    public String addProjectFromGitHub(
+            @RequestParam String repoUrl,
+            @RequestParam(required = false) String liveUrl,
+            Model model
+    ) {
+        try {
+            projectAdminService.addFromGitHub(repoUrl, liveUrl);
+            return "redirect:/admin";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("projectRepoUrlInput", repoUrl);
+            model.addAttribute("projectLiveUrlInput", liveUrl);
+            return dashboardWithProjectError(model, e.getMessage());
+        }
+    }
+
+    @PostMapping("/projects/manual")
+    public String addProjectManually(
+            @RequestParam String name,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) String language,
+            @RequestParam(required = false) String liveUrl,
+            Model model
+    ) {
+        try {
+            projectAdminService.addManual(name, description, language, liveUrl);
+            return "redirect:/admin";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("projectNameInput", name);
+            model.addAttribute("projectDescriptionInput", description);
+            model.addAttribute("projectLanguageInput", language);
+            model.addAttribute("projectManualLiveUrlInput", liveUrl);
+            return dashboardWithProjectError(model, e.getMessage());
+        }
+    }
+
+    @PostMapping("/projects/{id}/delete")
+    public String deleteProject(@PathVariable Long id) {
+        projectAdminService.delete(id);
+        return "redirect:/admin";
+    }
+
+    private String dashboardWithProjectError(Model model, String error) {
+        model.addAttribute("posts", postRepository.findAllByOrderByCreatedAtDesc());
+        model.addAttribute("projects", projectRepository.findAllByOrderByCreatedAtDesc());
+        model.addAttribute("projectError", error);
         return "admin/dashboard";
     }
 

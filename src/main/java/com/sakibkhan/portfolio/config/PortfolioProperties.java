@@ -21,8 +21,8 @@ public record PortfolioProperties(
         List<Education> education,
         List<Certification> certifications,
         List<Award> awards,
-        Socials socials,
-        List<ProjectFallback> projectsFallback
+        List<CodingProfile> codingProfiles,
+        Socials socials
 ) {
 
     public record Hero(String name, String title, String status, List<Cta> ctas) {}
@@ -53,15 +53,11 @@ public record PortfolioProperties(
             String detail
     ) {}
 
-    public record Certification(String name, String issuer, String credentialId) {}
+    public record Certification(String name, String issuer, String credentialId, String credentialUrl) {}
 
     public record Award(String name, String detail) {}
 
-    public record Socials(String github, String linkedin, String email) {}
+    public record CodingProfile(String platform, String url) {}
 
-    /**
-     * Used only when {@code GitHubProjectService} can't reach the GitHub API
-     * (see design doc, Section 6) — the safety net, not the primary path.
-     */
-    public record ProjectFallback(String name, String description, String url, String language) {}
+    public record Socials(String github, String linkedin, String email) {}
 }

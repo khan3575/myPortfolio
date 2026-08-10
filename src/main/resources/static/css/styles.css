@@ -1,15 +1,77 @@
 :root {
-    --color-bg: #0f1115;
-    --color-surface: #171a21;
-    --color-border: #262b36;
-    --color-text: #e6e8eb;
-    --color-text-muted: #9aa1ac;
-    --color-accent: #5b8cff;
+    /* "Raw Architecture" — 60 Crisp Off-White / 30 Structured Ash / 10 Servlet Blue */
+    --color-bg: #f8f9fa;
+    --color-surface: #eef1f4;
+    --color-border: #e1e4e8;
+    --color-text: #14171c;
+    --color-text-muted: #5b6270;
+    --color-accent: #005c97;
+    --color-on-accent: #ffffff;
     --space-1: 0.5rem;
     --space-2: 1rem;
     --space-3: 1.5rem;
     --space-4: 2.5rem;
     --max-width: 860px;
+
+    /* Glass surfaces, tuned for a light, near-white backdrop -- plain
+       white-on-white translucency barely reads as "glass" here, so the
+       panel gets a faint accent tint, a blue-tinted border instead of flat
+       gray, and a colored shadow with an inset highlight along the top
+       edge (light catching the top of a glass pane). */
+    --glass-tint: color-mix(in srgb, #ffffff 96%, var(--color-accent) 4%);
+    --glass-bg: color-mix(in srgb, var(--glass-tint) 62%, transparent);
+    --glass-card-bg: color-mix(in srgb, var(--glass-tint) 76%, transparent);
+    --glass-border: color-mix(in srgb, var(--color-accent) 18%, transparent);
+    --glass-shadow: 0 10px 30px rgba(0, 92, 151, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    --glass-blur: blur(20px) saturate(160%);
+    --glass-blur-soft: blur(10px) saturate(140%);
+    --ambient-gradient:
+        radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--color-accent) 34%, transparent) 0%, transparent 45%),
+        radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--color-accent) 22%, transparent) 0%, transparent 48%),
+        radial-gradient(circle at 50% 95%, color-mix(in srgb, var(--color-accent) 18%, transparent) 0%, transparent 55%);
+}
+
+:root[data-theme="dark"] {
+    /* "Terminal Pupil" — 60 Deep Slate / 30 Gunmetal / 10 Codeforces Green */
+    --color-bg: #181a1f;
+    --color-surface: #2d323b;
+    --color-border: #3a4049;
+    --color-text: #e7e9ec;
+    --color-text-muted: #8b93a1;
+    --color-accent: #00a82d;
+    --color-on-accent: #0b0d10;
+
+    /* Dark already has enough contrast for plain surface-tinted glass --
+       kept as its own explicit values (not inherited from :root above) so
+       tuning light mode above doesn't also change how dark looks. */
+    --glass-bg: color-mix(in srgb, var(--color-surface) 55%, transparent);
+    --glass-card-bg: color-mix(in srgb, var(--color-surface) 70%, transparent);
+    --glass-border: color-mix(in srgb, var(--color-text) 12%, transparent);
+    --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    --ambient-gradient:
+        radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--color-accent) 26%, transparent) 0%, transparent 42%),
+        radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--color-accent) 16%, transparent) 0%, transparent 46%),
+        radial-gradient(circle at 50% 95%, color-mix(in srgb, var(--color-accent) 14%, transparent) 0%, transparent 50%);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --color-bg: #181a1f;
+        --color-surface: #2d323b;
+        --color-border: #3a4049;
+        --color-text: #e7e9ec;
+        --color-text-muted: #8b93a1;
+        --color-accent: #00a82d;
+        --color-on-accent: #0b0d10;
+        --glass-bg: color-mix(in srgb, var(--color-surface) 55%, transparent);
+        --glass-card-bg: color-mix(in srgb, var(--color-surface) 70%, transparent);
+        --glass-border: color-mix(in srgb, var(--color-text) 12%, transparent);
+        --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        --ambient-gradient:
+            radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--color-accent) 26%, transparent) 0%, transparent 42%),
+            radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--color-accent) 16%, transparent) 0%, transparent 46%),
+            radial-gradient(circle at 50% 95%, color-mix(in srgb, var(--color-accent) 14%, transparent) 0%, transparent 50%);
+    }
 }
 
 * {
@@ -18,10 +80,18 @@
 
 body {
     margin: 0;
-    background: var(--color-bg);
+    min-height: 100vh;
+    background-color: var(--color-bg);
+    /* Ambient blobs tinted from the accent color -- the "something behind
+       the glass" that makes the blur on panels/cards actually visible,
+       rather than just a flat translucent tint. */
+    background-image: var(--ambient-gradient);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
     color: var(--color-text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.6;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 a {
@@ -40,7 +110,13 @@ a:hover {
 }
 
 header.site-header {
-    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid var(--glass-border);
     padding: var(--space-2) 0;
 }
 
@@ -54,16 +130,44 @@ header.site-header .container {
 
 nav.site-nav {
     display: flex;
+    align-items: center;
     gap: var(--space-3);
 }
 
-section {
-    padding: var(--space-4) 0;
-    border-bottom: 1px solid var(--color-border);
+.theme-toggle {
+    background: var(--glass-card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: var(--color-text);
+    width: 2.2rem;
+    height: 2.2rem;
+    padding: 0;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    backdrop-filter: var(--glass-blur-soft);
+    -webkit-backdrop-filter: var(--glass-blur-soft);
+    transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
-section:last-of-type {
-    border-bottom: none;
+.theme-toggle:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-1px);
+}
+
+/* Every <section> on the homepage carries .container, and every other
+   page's <main> IS its .container -- so this one rule turns each into a
+   floating glass panel, on every page, with no template changes. */
+section.container,
+main.container {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: var(--space-4) var(--space-3);
+    margin: var(--space-3) auto;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
 }
 
 h1, h2, h3 {
@@ -94,9 +198,19 @@ h2.section-title {
 }
 
 .cta-group a {
-    border: 1px solid var(--color-border);
+    background: var(--glass-card-bg);
+    border: 1px solid var(--glass-border);
     padding: 0.5rem 1rem;
-    border-radius: 6px;
+    border-radius: 10px;
+    backdrop-filter: var(--glass-blur-soft);
+    -webkit-backdrop-filter: var(--glass-blur-soft);
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.cta-group a:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    text-decoration: none;
 }
 
 .grid {
@@ -106,10 +220,18 @@ h2.section-title {
 }
 
 .card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
+    background: var(--glass-card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
     padding: var(--space-3);
+    backdrop-filter: var(--glass-blur-soft);
+    -webkit-backdrop-filter: var(--glass-blur-soft);
+    box-shadow: var(--glass-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
 }
 
 .card h3 {
@@ -129,12 +251,14 @@ h2.section-title {
 }
 
 .tag {
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    padding: 0.15rem 0.5rem;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
     font-size: 0.8rem;
     color: var(--color-text-muted);
+    backdrop-filter: var(--glass-blur-soft);
+    -webkit-backdrop-filter: var(--glass-blur-soft);
 }
 
 .timeline-item {
@@ -173,9 +297,9 @@ form.stacked label {
 }
 
 input, textarea, select {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
+    background: var(--glass-card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
     color: var(--color-text);
     padding: 0.5rem;
     font-family: inherit;
@@ -189,13 +313,18 @@ textarea {
 
 button, input[type="submit"] {
     background: var(--color-accent);
-    color: #0f1115;
+    color: var(--color-on-accent);
     border: none;
-    border-radius: 6px;
+    border-radius: 10px;
     padding: 0.6rem 1.2rem;
     font-weight: 600;
     cursor: pointer;
     width: fit-content;
+    transition: transform 0.15s ease;
+}
+
+button:hover, input[type="submit"]:hover {
+    transform: translateY(-1px);
 }
 
 .actions {
@@ -234,8 +363,24 @@ footer.site-footer {
     padding: var(--space-3) 0;
     color: var(--color-text-muted);
     font-size: 0.9rem;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur-soft);
+    -webkit-backdrop-filter: var(--glass-blur-soft);
+    border-top: 1px solid var(--glass-border);
+    margin-top: var(--space-3);
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .card, .cta-group a, button, input[type="submit"], .theme-toggle {
+        transition: none;
+    }
+
+    .card:hover, .cta-group a:hover, button:hover, input[type="submit"]:hover, .theme-toggle:hover {
+        transform: none;
+    }
+}
+
+/* Phone: up to 600px */
 @media (max-width: 600px) {
     .hero h1 {
         font-size: 1.7rem;
@@ -244,5 +389,45 @@ footer.site-footer {
     header.site-header .container {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    nav.site-nav {
+        gap: var(--space-2);
+        flex-wrap: wrap;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cta-group a {
+        text-align: center;
+    }
+}
+
+/* Tablet: 601px to 900px */
+@media (min-width: 601px) and (max-width: 900px) {
+    :root {
+        --max-width: 700px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Desktop: 901px and up */
+@media (min-width: 901px) {
+    :root {
+        --max-width: 960px;
+    }
+
+    .hero h1 {
+        font-size: 2.6rem;
     }
 }

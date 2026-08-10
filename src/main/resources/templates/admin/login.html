@@ -2,12 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin login</title>
+    <script th:src="@{/js/theme.js}"></script>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 
 <main class="container">
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" style="float: right;">🌙</button>
     <h1>Admin login</h1>
 
     <p class="error-text" th:if="${param.error}">Invalid username or password.</p>

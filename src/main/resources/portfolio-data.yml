@@ -61,6 +61,7 @@ portfolio:
     - name: "Spring Boot 4, Spring 7 & Hibernate for Beginners"
       issuer: "Udemy — Chad Darby"
       credentialId: "UC-904cf6fb-22b0-4ae2-85ee-8279b6caa392"
+      credentialUrl: "https://www.udemy.com/certificate/UC-904cf6fb-22b0-4ae2-85ee-8279b6caa392/"
 
   awards:
     - name: "ICPC Asia Dhaka Regional Contest 2025"
@@ -74,23 +75,19 @@ portfolio:
     - name: "BUBT Intra University Programming Contest"
       detail: "4th position, Senior Division"
 
+  codingProfiles:
+    - platform: "Codeforces"
+      url: "https://codeforces.com/profile/khan3575"
+    - platform: "CodeChef"
+      url: "https://www.codechef.com/users/khan3575"
+    - platform: "LeetCode"
+      url: "https://leetcode.com/u/khan3575/"
+    - platform: "AtCoder"
+      url: "https://atcoder.jp/users/khan3575"
+    - platform: "NeetCode"
+      url: "https://neetcode.io/user/RubyKunai532"
+
   socials:
     github: "https://github.com/khan3575"
     linkedin: "https://linkedin.com/in/khan3575"
     email: "saakibkhaan290@gmail.com"
-
-  # Used only when the GitHub API is unreachable or rate-limited (see GitHubProjectService).
-  # Kept intentionally small -- this is a safety net, not the primary content path.
-  projectsFallback:
-    - name: "central-auth"
-      description: "OAuth2/OIDC authentication microservice — Spring Boot, Spring Security, JPA, Flyway"
-      url: "https://github.com/khan3575/central-auth"
-      language: "Java"
-    - name: "Asset-Tagging-System"
-      description: "Java/Spring Boot system for tracking and tagging physical assets"
-      url: "https://github.com/khan3575/Asset-Tagging-System"
-      language: "Java"
-    - name: "dsa-practice"
-      description: "Consolidated DSA & competitive programming practice (LeetCode, NeetCode, Codeforces, CSES, ICPC prep)"
-      url: "https://github.com/khan3575/dsa-practice"
-      language: "C++"

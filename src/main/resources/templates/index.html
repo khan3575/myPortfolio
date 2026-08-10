@@ -2,7 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="${hero.name() + ' — ' + hero.title()}">Portfolio</title>
+    <script th:src="@{/js/theme.js}"></script>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
@@ -54,9 +56,15 @@
         <h2 class="section-title">Projects</h2>
         <div class="grid">
             <div class="card" th:each="project : ${projects}">
-                <h3><a th:href="${project.url()}" th:text="${project.name()}">Project</a></h3>
-                <p th:text="${project.description()}">Description</p>
-                <span class="tag" th:if="${project.language()}" th:text="${project.language()}">Language</span>
+                <h3>
+                    <a th:if="${project.primaryUrl}" th:href="${project.primaryUrl}" th:text="${project.name}" target="_blank" rel="noopener">Project</a>
+                    <span th:unless="${project.primaryUrl}" th:text="${project.name}">Project</span>
+                </h3>
+                <p th:text="${project.description}">Description</p>
+                <p class="meta" th:if="${project.liveUrl != null and project.sourceUrl != null}">
+                    <a th:href="${project.sourceUrl}" target="_blank" rel="noopener">Source &rarr;</a>
+                </p>
+                <span class="tag" th:if="${project.language}" th:text="${project.language}">Language</span>
             </div>
         </div>
     </section>
@@ -74,7 +82,12 @@
     <section id="certifications" class="container">
         <h2 class="section-title">Certifications</h2>
         <ul>
-            <li th:each="cert : ${certifications}" th:text="${cert.name() + ' — ' + cert.issuer()}">Cert</li>
+            <li th:each="cert : ${certifications}">
+                <span th:text="${cert.name() + ' — ' + cert.issuer()}">Cert</span>
+                <span th:if="${cert.credentialId()}" class="meta">
+                    (<a th:if="${cert.credentialUrl()}" th:href="${cert.credentialUrl()}" th:text="${cert.credentialId()}" target="_blank" rel="noopener">ID</a><span th:unless="${cert.credentialUrl()}" th:text="${cert.credentialId()}">ID</span>)
+                </span>
+            </li>
         </ul>
     </section>
 
@@ -83,6 +96,15 @@
         <ul>
             <li th:each="award : ${awards}" th:text="${award.name() + ' — ' + award.detail()}">Award</li>
         </ul>
+    </section>
+
+    <section id="coding-profiles" class="container" th:if="${not #lists.isEmpty(codingProfiles)}">
+        <h2 class="section-title">Coding Profiles</h2>
+        <p>
+            <span th:each="profile, iter : ${codingProfiles}">
+                <a th:href="${profile.url()}" th:text="${profile.platform()}" target="_blank" rel="noopener">Platform</a><span th:unless="${iter.last}"> · </span>
+            </span>
+        </p>
     </section>
 
     <section id="blog" class="container" th:if="${not #lists.isEmpty(recentPosts)}">

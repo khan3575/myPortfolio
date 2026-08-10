@@ -2,7 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Admin — Posts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin</title>
+    <script th:src="@{/js/theme.js}"></script>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
@@ -10,7 +12,9 @@
 <div th:replace="~{layout :: header('Sakib Khan')}"></div>
 
 <main class="container">
-    <h1>Posts</h1>
+    <h1>Admin</h1>
+
+    <h2 class="section-title">Posts</h2>
 
     <p>
         <a href="/admin/posts/new">+ New post</a> ·
@@ -44,6 +48,74 @@
                 </form>
 
                 <a th:href="@{'/admin/posts/' + ${post.id} + '/delete'}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2 class="section-title">Projects</h2>
+
+    <p class="error-text" th:if="${projectError}" th:text="${projectError}">Error</p>
+
+    <h3>Add from GitHub</h3>
+    <form class="stacked" th:action="@{/admin/projects/github}" method="post">
+        <label>
+            GitHub repo URL
+            <input type="url" name="repoUrl" th:value="${projectRepoUrlInput}" placeholder="https://github.com/khan3575/central-auth" required>
+        </label>
+        <label>
+            Live URL
+            <input type="url" name="liveUrl" th:value="${projectLiveUrlInput}" placeholder="https://central-auth.sakib-khan.com (optional)">
+        </label>
+        <button type="submit">Add from GitHub</button>
+    </form>
+
+    <h3>Add manually</h3>
+    <p class="meta">For a project with no public repo — name, description, and a live link only.</p>
+    <form class="stacked" th:action="@{/admin/projects/manual}" method="post">
+        <label>
+            Name
+            <input type="text" name="name" th:value="${projectNameInput}" placeholder="wardrobe" required>
+        </label>
+        <label>
+            Description
+            <input type="text" name="description" th:value="${projectDescriptionInput}" placeholder="optional" maxlength="500">
+        </label>
+        <label>
+            Language
+            <input type="text" name="language" th:value="${projectLanguageInput}" placeholder="Java (optional)">
+        </label>
+        <label>
+            Live URL
+            <input type="url" name="liveUrl" th:value="${projectManualLiveUrlInput}" placeholder="https://wardrobe.sakib-khan.com" required>
+        </label>
+        <button type="submit">Add manually</button>
+    </form>
+
+    <p th:if="${#lists.isEmpty(projects)}">No projects yet.</p>
+
+    <table th:if="${not #lists.isEmpty(projects)}">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Language</th>
+            <th>Links</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="project : ${projects}">
+            <td th:text="${project.name}">Name</td>
+            <td th:text="${project.language}">Language</td>
+            <td>
+                <a th:if="${project.sourceUrl}" th:href="${project.sourceUrl}" target="_blank" rel="noopener">Source</a>
+                <span th:if="${project.sourceUrl != null and project.liveUrl != null}"> &middot; </span>
+                <a th:if="${project.liveUrl}" th:href="${project.liveUrl}" target="_blank" rel="noopener">Live</a>
+            </td>
+            <td class="actions">
+                <form th:action="@{'/admin/projects/' + ${project.id} + '/delete'}" method="post">
+                    <button type="submit">Remove</button>
+                </form>
             </td>
         </tr>
         </tbody>
