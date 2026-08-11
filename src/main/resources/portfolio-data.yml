@@ -47,7 +47,9 @@ portfolio:
       start: "2025-01"
       end: "2026-01"
       bullets:
-        - "Supported undergraduate courses in Computer Networks, Object-Oriented Programming, and Web Database."
+        - "Computer Networks — Conducted lab sessions and practical demonstrations, administered examinations, and evaluated and graded student submissions."
+        - "E-Commerce & Web Development — Taught foundational PHP, HTML, and CSS; prepared course materials, delivered live class sessions, and provided debugging and technical support to students."
+        - "Object-Oriented Programming (C++) — Instructed core OOP concepts and supported students through problem-solving and doubt-resolution sessions."
 
   education:
     - degree: "B.Sc. in Computer Science and Engineering"
