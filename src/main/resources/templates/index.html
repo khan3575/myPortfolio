@@ -121,7 +121,9 @@
     <section id="contact" class="container">
         <h2 class="section-title">Contact</h2>
         <p>
-            <a th:href="'mailto:' + ${socials.email()}" th:text="${socials.email()}">email</a> ·
+            <a th:href="'mailto:' + ${socials.email()}" th:text="${socials.email()}">email</a>
+            <span th:if="${socials.secondaryEmail()}"> · <a th:href="'mailto:' + ${socials.secondaryEmail()}" th:text="${socials.secondaryEmail()}">email</a></span>
+            ·
             <a th:href="${socials.github()}">GitHub</a> ·
             <a th:href="${socials.linkedin()}">LinkedIn</a>
         </p>

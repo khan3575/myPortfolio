@@ -59,5 +59,5 @@ public record PortfolioProperties(
 
     public record CodingProfile(String platform, String url) {}
 
-    public record Socials(String github, String linkedin, String email) {}
+    public record Socials(String github, String linkedin, String email, String secondaryEmail) {}
 }
