@@ -30,8 +30,14 @@
             <input type="text" th:field="*{summary}" maxlength="500">
         </label>
         <label>
+            Insert image
+            <input type="file" id="imageUpload" accept="image/*">
+        </label>
+        <p id="imageUploadStatus"></p>
+
+        <label>
             Content (Markdown)
-            <textarea th:field="*{contentMarkdown}"></textarea>
+            <textarea th:field="*{contentMarkdown}" id="contentMarkdown"></textarea>
         </label>
         <button type="submit">Save</button>
     </form>
@@ -40,6 +46,42 @@
 </main>
 
 <div th:replace="~{layout :: footer}"></div>
+
+<script th:inline="none">
+    document.getElementById('imageUpload').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (!file) {
+            return;
+        }
+        const status = document.getElementById('imageUploadStatus');
+        const csrfToken = document.querySelector('input[name="_csrf"]').value;
+        status.textContent = 'Uploading...';
+
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('_csrf', csrfToken);
+
+        fetch('/admin/images/upload', { method: 'POST', body: formData })
+            .then(response => response.json().then(data => ({ ok: response.ok, data })))
+            .then(({ ok, data }) => {
+                if (!ok) {
+                    status.textContent = data.error || 'Upload failed.';
+                    return;
+                }
+                const textarea = document.getElementById('contentMarkdown');
+                const cursorPos = textarea.selectionStart;
+                const before = textarea.value.substring(0, cursorPos);
+                const after = textarea.value.substring(cursorPos);
+                const snippet = '![](' + data.url + ')';
+                textarea.value = before + snippet + after;
+                status.textContent = 'Image inserted.';
+                event.target.value = '';
+            })
+            .catch(() => {
+                status.textContent = 'Upload failed.';
+            });
+    });
+</script>
 
 </body>
 </html>

@@ -3,13 +3,19 @@ package com.sakibkhan.portfolio.web;
 import com.sakibkhan.portfolio.model.Post;
 import com.sakibkhan.portfolio.repository.PostRepository;
 import com.sakibkhan.portfolio.repository.ProjectRepository;
+import com.sakibkhan.portfolio.service.ImageStorageService;
 import com.sakibkhan.portfolio.service.PostAdminService;
 import com.sakibkhan.portfolio.service.ProjectAdminService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.io.IOException;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
@@ -19,17 +25,20 @@ public class AdminController {
     private final PostAdminService postAdminService;
     private final ProjectRepository projectRepository;
     private final ProjectAdminService projectAdminService;
+    private final ImageStorageService imageStorageService;
 
     public AdminController(
             PostRepository postRepository,
             PostAdminService postAdminService,
             ProjectRepository projectRepository,
-            ProjectAdminService projectAdminService
+            ProjectAdminService projectAdminService,
+            ImageStorageService imageStorageService
     ) {
         this.postRepository = postRepository;
         this.postAdminService = postAdminService;
         this.projectRepository = projectRepository;
         this.projectAdminService = projectAdminService;
+        this.imageStorageService = imageStorageService;
     }
 
     @GetMapping("/login")
@@ -125,6 +134,21 @@ public class AdminController {
         }
         postAdminService.update(id, post);
         return "redirect:/admin";
+    }
+
+    @PostMapping("/images/upload")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("image") MultipartFile image) {
+        try {
+            String url = imageStorageService.upload(image);
+            return ResponseEntity.ok(Map.of("url", url));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .body(Map.of("error", "Image storage is not configured."));
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Upload failed."));
+        }
     }
 
     @PostMapping("/posts/{id}/publish")
