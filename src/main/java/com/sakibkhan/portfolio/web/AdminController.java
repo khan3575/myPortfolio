@@ -73,17 +73,19 @@ public class AdminController {
     public String addProjectManually(
             @RequestParam String name,
             @RequestParam(required = false) String description,
-            @RequestParam(required = false) String language,
+            @RequestParam(required = false) String languages,
+            @RequestParam(required = false) String repoUrl,
             @RequestParam(required = false) String liveUrl,
             Model model
     ) {
         try {
-            projectAdminService.addManual(name, description, language, liveUrl);
+            projectAdminService.addManual(name, description, languages, repoUrl, liveUrl);
             return "redirect:/admin";
         } catch (IllegalArgumentException e) {
             model.addAttribute("projectNameInput", name);
             model.addAttribute("projectDescriptionInput", description);
-            model.addAttribute("projectLanguageInput", language);
+            model.addAttribute("projectLanguagesInput", languages);
+            model.addAttribute("projectManualRepoUrlInput", repoUrl);
             model.addAttribute("projectManualLiveUrlInput", liveUrl);
             return dashboardWithProjectError(model, e.getMessage());
         }

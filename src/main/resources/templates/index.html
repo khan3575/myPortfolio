@@ -64,7 +64,7 @@
                 <p class="meta" th:if="${project.liveUrl != null and project.sourceUrl != null}">
                     <a th:href="${project.sourceUrl}" target="_blank" rel="noopener">Source &rarr;</a>
                 </p>
-                <span class="tag" th:if="${project.language}" th:text="${project.language}">Language</span>
+                <span class="tag" th:each="language : ${project.languages}" th:text="${language}">Language</span>
             </div>
         </div>
     </section>

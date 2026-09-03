@@ -19,6 +19,7 @@ portfolio:
       web stacks used on the company's banking platform.
     highlights:
       - "Built and deployed central-auth, a live OAuth2/OIDC authentication microservice"
+      - "Built and deployed the Asset Tagging System — custody tracking with a database-enforced audit trail and multi-signature approval workflow (assets.sakib-khan.com)"
       - "Codeforces Pupil, ICPC Asia Dhaka Regional 2025 (ranked 103rd nationally)"
       - "B.Sc. Computer Science and Engineering, BUBT (CGPA 3.81)"
 
@@ -40,7 +41,7 @@ portfolio:
       bullets:
         - "Completing structured onboarding across the Java web stack used on the company's banking platform -- legacy (Servlets, JSP, JSTL, JSF) and modern (Spring Boot, Thymeleaf) -- plus JDBC/JNDI data access and MVC architecture."
         - "Building proficiency in OOP design, centralized logging, and aspect-oriented programming (AOP) for cross-cutting concerns, within version-controlled Git workflows."
-        - "Deploying applications on Apache Tomcat, including manual JAR/dependency management; applied these skills by building a task management system and an asset tagging system."
+        - "Deploying applications on Apache Tomcat, including manual JAR/dependency management; applied these skills by building a task management system and the Asset Tagging System, now live at assets.sakib-khan.com with a database-enforced audit trail and a multi-signature approval workflow for custody transfers."
     - role: "Teaching Assistant"
       company: "Bangladesh University of Business and Technology"
       location: "Dhaka, Bangladesh"

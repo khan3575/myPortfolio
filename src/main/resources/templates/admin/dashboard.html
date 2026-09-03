@@ -71,23 +71,28 @@
     </form>
 
     <h3>Add manually</h3>
-    <p class="meta">For a project with no public repo — name, description, and a live link only.</p>
+    <p class="meta">Everything typed by hand — for a project with no public repo, or one whose GitHub
+        description and detected languages don't do it justice. At least one link is required.</p>
     <form class="stacked" th:action="@{/admin/projects/manual}" method="post">
         <label>
             Name
-            <input type="text" name="name" th:value="${projectNameInput}" placeholder="wardrobe" required>
+            <input type="text" name="name" th:value="${projectNameInput}" placeholder="Asset Tagging System" required>
         </label>
         <label>
             Description
             <input type="text" name="description" th:value="${projectDescriptionInput}" placeholder="optional" maxlength="500">
         </label>
         <label>
-            Language
-            <input type="text" name="language" th:value="${projectLanguageInput}" placeholder="Java (optional)">
+            Languages
+            <input type="text" name="languages" th:value="${projectLanguagesInput}" placeholder="Java, Thymeleaf, SCSS — comma-separated, most significant first">
+        </label>
+        <label>
+            GitHub repo URL
+            <input type="url" name="repoUrl" th:value="${projectManualRepoUrlInput}" placeholder="https://github.com/khan3575/Asset-Tagging-System (optional)">
         </label>
         <label>
             Live URL
-            <input type="url" name="liveUrl" th:value="${projectManualLiveUrlInput}" placeholder="https://wardrobe.sakib-khan.com" required>
+            <input type="url" name="liveUrl" th:value="${projectManualLiveUrlInput}" placeholder="https://assets.sakib-khan.com (optional)">
         </label>
         <button type="submit">Add manually</button>
     </form>
@@ -98,7 +103,7 @@
         <thead>
         <tr>
             <th>Name</th>
-            <th>Language</th>
+            <th>Languages</th>
             <th>Links</th>
             <th>Actions</th>
         </tr>
@@ -106,7 +111,7 @@
         <tbody>
         <tr th:each="project : ${projects}">
             <td th:text="${project.name}">Name</td>
-            <td th:text="${project.language}">Language</td>
+            <td th:text="${#strings.listJoin(project.languages, ', ')}">Languages</td>
             <td>
                 <a th:if="${project.sourceUrl}" th:href="${project.sourceUrl}" target="_blank" rel="noopener">Source</a>
                 <span th:if="${project.sourceUrl != null and project.liveUrl != null}"> &middot; </span>

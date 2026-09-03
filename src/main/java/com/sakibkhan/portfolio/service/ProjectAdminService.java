@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +27,9 @@ public class ProjectAdminService {
             Pattern.compile("^https?://(?:www\\.)?github\\.com/([\\w.-]+)/([\\w.-]+?)(?:\\.git)?/?$");
     private static final Pattern HTTP_URL_PATTERN = Pattern.compile("^https?://.+");
 
+    /** Matches the column width in {@code project_languages}. */
+    private static final int MAX_LANGUAGE_LENGTH = 100;
+
     private final GitHubApiClient apiClient;
     private final ProjectRepository projectRepository;
 
@@ -33,7 +39,7 @@ public class ProjectAdminService {
     }
 
     /**
-     * Looks the repo up on GitHub so name/description/language reflect the
+     * Looks the repo up on GitHub so name/description/languages reflect the
      * real repo rather than whatever was typed, then stores it. The
      * duplicate check runs against GitHub's own {@code html_url} (not the
      * raw pasted string) so two URLs that differ only in case or a trailing
@@ -76,31 +82,43 @@ public class ProjectAdminService {
                 .description(repoData.description())
                 .sourceUrl(repoData.htmlUrl())
                 .liveUrl(normalizeUrl(rawLiveUrl))
-                .language(repoData.language())
+                .languages(languagesFor(owner, repo, repoData.language()))
                 .build();
 
         return projectRepository.save(project);
     }
 
     /**
-     * For a project with no public repo to point to -- closed-source, or not
-     * pushed anywhere public yet. Backed only by a live/demo link and
-     * hand-typed details, since there's no GitHub API call to pull them from.
+     * Everything hand-typed, for the cases the GitHub lookup can't serve: a
+     * closed-source project, a repo whose own description undersells it, or
+     * a stack the API's byte counts get wrong. Both links are optional
+     * individually -- a project just has to be reachable by one of them.
      */
-    public Project addManual(String name, String description, String language, String rawLiveUrl) {
+    public Project addManual(
+            String name,
+            String description,
+            String rawLanguages,
+            String rawRepoUrl,
+            String rawLiveUrl
+    ) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Name is required.");
         }
 
+        String sourceUrl = normalizeRepoUrl(rawRepoUrl);
         String liveUrl = normalizeUrl(rawLiveUrl);
-        if (liveUrl == null) {
-            throw new IllegalArgumentException("A live URL is required for a project with no GitHub repo.");
+        if (sourceUrl == null && liveUrl == null) {
+            throw new IllegalArgumentException("Give at least one link — a GitHub repo, a live URL, or both.");
+        }
+        if (sourceUrl != null && projectRepository.existsBySourceUrl(sourceUrl)) {
+            throw new IllegalArgumentException("That repo is already on the list.");
         }
 
         Project project = Project.builder()
                 .name(name.trim())
                 .description(blankToNull(description))
-                .language(blankToNull(language))
+                .languages(parseLanguages(rawLanguages))
+                .sourceUrl(sourceUrl)
                 .liveUrl(liveUrl)
                 .build();
 
@@ -112,6 +130,62 @@ public class ProjectAdminService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         projectRepository.deleteById(id);
+    }
+
+    /**
+     * The /languages endpoint is a second call that can fail on its own (rate
+     * limits especially), and losing it shouldn't cost the whole add -- so a
+     * failure falls back to the primary language the repo lookup already
+     * gave us.
+     */
+    private List<String> languagesFor(String owner, String repo, String primaryLanguage) {
+        try {
+            List<String> languages = apiClient.fetchLanguages(owner, repo);
+            if (!languages.isEmpty()) {
+                return new ArrayList<>(languages);
+            }
+        } catch (Exception e) {
+            log.warn("Couldn't fetch languages for {}/{}, falling back to the primary one", owner, repo, e);
+        }
+        return primaryLanguage == null ? new ArrayList<>() : new ArrayList<>(List.of(primaryLanguage));
+    }
+
+    /**
+     * Comma-separated in, ordered list out -- typing order is display order.
+     * Duplicates are dropped case-insensitively so "Java, java" doesn't render
+     * as two tags.
+     */
+    private List<String> parseLanguages(String raw) {
+        List<String> languages = new ArrayList<>();
+        if (raw == null || raw.isBlank()) {
+            return languages;
+        }
+        for (String part : Arrays.stream(raw.split(",")).map(String::trim).toList()) {
+            if (part.isEmpty() || languages.stream().anyMatch(part::equalsIgnoreCase)) {
+                continue;
+            }
+            if (part.length() > MAX_LANGUAGE_LENGTH) {
+                throw new IllegalArgumentException("Language names are capped at " + MAX_LANGUAGE_LENGTH + " characters.");
+            }
+            languages.add(part);
+        }
+        return languages;
+    }
+
+    /** Same shape check as the GitHub-lookup path, but the URL is optional here. */
+    private String normalizeRepoUrl(String raw) {
+        if (raw == null || raw.isBlank()) {
+            return null;
+        }
+        String trimmed = raw.trim();
+        Matcher matcher = REPO_URL_PATTERN.matcher(trimmed);
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException("Enter a GitHub repo URL, like https://github.com/owner/repo.");
+        }
+        // Stored without the ".git"/trailing slash so it matches what the
+        // GitHub-lookup path saves for the same repo, and the duplicate
+        // check catches it.
+        return "https://github.com/" + matcher.group(1) + "/" + matcher.group(2);
     }
 
     private String normalizeUrl(String raw) {

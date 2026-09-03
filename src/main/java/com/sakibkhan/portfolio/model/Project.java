@@ -6,6 +6,8 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,8 +37,17 @@ public class Project {
     @Column(name = "live_url", length = 500)
     private String liveUrl;
 
-    @Column(length = 100)
-    private String language;
+    /**
+     * Every language the project is written in, most significant first --
+     * GitHub's byte counts decide the order for a repo-backed project, and
+     * the typed order for a hand-added one.
+     */
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "project_languages", joinColumns = @JoinColumn(name = "project_id"))
+    @OrderColumn(name = "position")
+    @Column(name = "language", length = 100, nullable = false)
+    @Builder.Default
+    private List<String> languages = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
