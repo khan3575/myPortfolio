@@ -33,7 +33,7 @@ portfolio:
       - name: "Frontend"
         items: ["HTML", "CSS", "Bootstrap", "Thymeleaf"]
       - name: "Databases"
-        items: ["MySQL", "PostgreSQL", "JDBC", "Flyway"]
+        items: ["MySQL", "JDBC", "Flyway"]
       - name: "Tools & Platforms"
         items: ["Git", "Maven", "Gradle", "Tomcat", "Docker", "Linux", "nginx", "Postman"]
 
@@ -62,8 +62,8 @@ portfolio:
       institution: "Bangladesh University of Business and Technology (BUBT)"
       location: "Dhaka, Bangladesh"
       start: "2022-01"
-      end: "2026-12"
-      detail: "CGPA 3.81, thesis defended April 2026. Core coursework: Database Management Systems, Software Engineering, Object-Oriented Programming (Java), Web Database."
+      end: "2026-04"
+      detail: "CGPA 3.81. All coursework completed December 2025, thesis defended April 2026. Core subjects: Database Management Systems, Software Engineering, Object-Oriented Programming (Java), Web Database."
 
   certifications:
     - name: "Spring Boot 4, Spring 7 & Hibernate for Beginners"

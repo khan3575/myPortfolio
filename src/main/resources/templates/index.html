@@ -46,7 +46,7 @@
         <h2 class="section-title">Experience</h2>
         <div class="timeline-item" th:each="job : ${experience}">
             <h3 th:text="${job.role() + ' · ' + job.company()}">Role · Company</h3>
-            <p class="meta" th:text="${job.location() + ' — ' + job.start() + ' to ' + (job.end() ?: 'Present')}">Location — dates</p>
+            <p class="meta" th:text="${job.dateRange() + ' · ' + job.location()}">Dates · Location</p>
             <ul>
                 <li th:each="bullet : ${job.bullets()}" th:text="${bullet}">Bullet</li>
             </ul>
@@ -75,7 +75,7 @@
         <div class="timeline-item" th:each="edu : ${education}">
             <h3 th:text="${edu.degree()}">Degree</h3>
             <p class="meta" th:text="${edu.institution() + ' — ' + edu.location()}">Institution — Location</p>
-            <p class="meta" th:text="${edu.start() + ' to ' + edu.end()}">Dates</p>
+            <p class="meta" th:text="${edu.dateRange()}">Dates</p>
             <p th:text="${edu.detail()}">Detail</p>
         </div>
     </section>
