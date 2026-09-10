@@ -12,6 +12,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.DelegatingRequestMatcherHeaderWriter;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter.XFrameOptionsMode;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Configuration
 public class SecurityConfig {
@@ -45,7 +51,24 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // The résumé page embeds the PDF with <object data="/cv">, and
+        // X-Frame-Options governs <object> and <embed> just as it does
+        // <iframe> -- so Spring Security's default DENY made every browser
+        // refuse to render it and fall through to the download fallback.
+        // Only that one route is relaxed, and only to same-origin; every other
+        // path, /admin included, keeps DENY.
+        RequestMatcher inlineCv = PathPatternRequestMatcher.withDefaults().matcher("/cv");
+
         http
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.disable())
+                        .addHeaderWriter(new DelegatingRequestMatcherHeaderWriter(
+                                inlineCv,
+                                new XFrameOptionsHeaderWriter(XFrameOptionsMode.SAMEORIGIN)))
+                        .addHeaderWriter(new DelegatingRequestMatcherHeaderWriter(
+                                new NegatedRequestMatcher(inlineCv),
+                                new XFrameOptionsHeaderWriter(XFrameOptionsMode.DENY)))
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll()
