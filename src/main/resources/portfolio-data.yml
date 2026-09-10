@@ -35,7 +35,7 @@ portfolio:
       - name: "Databases"
         items: ["MySQL", "JDBC", "Flyway"]
       - name: "Tools & Platforms"
-        items: ["Git", "Maven", "Gradle", "Tomcat", "Docker", "Linux", "nginx", "Postman"]
+        items: ["Git", "Maven", "Gradle", "Tomcat", "Docker", "Linux", "Postman"]
 
   experience:
     - role: "Software Engineer Intern"
