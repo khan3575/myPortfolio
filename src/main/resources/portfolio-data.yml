@@ -6,7 +6,7 @@ portfolio:
     ctas:
       - label: "View Projects"
         href: "#projects"
-      - label: "Resume"
+      - label: "Résumé"
         href: "/resume"
       - label: "Contact"
         href: "#contact"
@@ -14,51 +14,56 @@ portfolio:
   about:
     pitch: >
       Java backend developer focused on Spring Boot, Spring Security, and REST APIs.
-      Currently completing structured onboarding at Sonali Intellect Limited, working
-      across legacy (Servlets, JSP, JSTL, JSF) and modern (Spring Boot, Thymeleaf) Java
-      web stacks used on the company's banking platform.
+      Completed a six-month software engineering placement at Sonali Intellect Limited,
+      building two internal Java web applications across legacy (Servlets, JSP, JSF) and
+      modern (Spring Boot) Java web stacks -- working from database design through
+      business logic to the web layer.
     highlights:
-      - "Built and deployed central-auth, a live OAuth2/OIDC authentication microservice"
-      - "Built and deployed the Asset Tagging System — custody tracking with a database-enforced audit trail and multi-signature approval workflow (assets.sakib-khan.com)"
-      - "Codeforces Pupil, ICPC Asia Dhaka Regional 2025 (ranked 103rd nationally)"
-      - "B.Sc. Computer Science and Engineering, BUBT (CGPA 3.81)"
+      - "Built the Asset Tagging System — custody tracking with a database-enforced audit trail and a multi-signoff transfer approval workflow (assets.sakib-khan.com)"
+      - "Six-month Software Engineer internship at Sonali Intellect Limited, shipping two internal Java web applications"
+      - "Codeforces Pupil (500+ problems solved), ICPC Asia Dhaka Regional 2025 — ranked 103rd nationally"
+      - "B.Sc. Computer Science and Engineering, BUBT — CGPA 3.81"
 
   skills:
     categories:
-      - name: "Languages & Frameworks"
-        items: ["Java", "Spring Boot", "Spring Security", "Spring Data JPA", "Thymeleaf", "C++"]
-      - name: "Data & APIs"
-        items: ["MySQL", "PostgreSQL", "H2", "Flyway", "REST APIs", "OpenAPI/Swagger"]
-      - name: "Tools"
-        items: ["Git", "Docker", "Maven", "Gradle", "nginx", "Linux"]
+      - name: "Languages"
+        items: ["Java", "C++", "SQL"]
+      - name: "Backend"
+        items: ["Spring Boot", "Spring Security", "Spring Data JPA", "Spring AOP", "Hibernate", "Jakarta Servlets & JSP", "JSF (Mojarra)", "REST APIs"]
+      - name: "Frontend"
+        items: ["HTML", "CSS", "Bootstrap", "Thymeleaf"]
+      - name: "Databases"
+        items: ["MySQL", "PostgreSQL", "JDBC", "Flyway"]
+      - name: "Tools & Platforms"
+        items: ["Git", "Maven", "Gradle", "Tomcat", "Docker", "Linux", "nginx", "Postman"]
 
   experience:
-    - role: "Java Intern"
+    - role: "Software Engineer Intern"
       company: "Sonali Intellect Limited"
-      location: "Dhaka, Bangladesh"
+      location: "Banani, Dhaka, Bangladesh"
       start: "2026-03"
-      end: null
+      end: "2026-09"
       bullets:
-        - "Completing structured onboarding across the Java web stack used on the company's banking platform -- legacy (Servlets, JSP, JSTL, JSF) and modern (Spring Boot, Thymeleaf) -- plus JDBC/JNDI data access and MVC architecture."
-        - "Building proficiency in OOP design, centralized logging, and aspect-oriented programming (AOP) for cross-cutting concerns, within version-controlled Git workflows."
-        - "Deploying applications on Apache Tomcat, including manual JAR/dependency management; applied these skills by building a task management system and the Asset Tagging System, now live at assets.sakib-khan.com with a database-enforced audit trail and a multi-signature approval workflow for custody transfers."
+        - "Built two internal Java web applications over a six-month placement — the Asset Tagging System and a Task Management System — working across database design, business logic and the web layer."
+        - "Refactored between Spring Data JPA and hand-written JDBC/DAO implementations across supervisor-led review cycles, building a working understanding of both the modern abstraction and the mechanics underneath it."
+        - "Worked to the team's existing code conventions in a Git-based workflow, deploying to Apache Tomcat with manual JAR and dependency management."
     - role: "Teaching Assistant"
       company: "Bangladesh University of Business and Technology"
       location: "Dhaka, Bangladesh"
       start: "2025-01"
       end: "2026-01"
       bullets:
-        - "Computer Networks — Conducted lab sessions and practical demonstrations, administered examinations, and evaluated and graded student submissions."
-        - "E-Commerce & Web Development — Taught foundational PHP, HTML, and CSS; prepared course materials, delivered live class sessions, and provided debugging and technical support to students."
-        - "Object-Oriented Programming (C++) — Instructed core OOP concepts and supported students through problem-solving and doubt-resolution sessions."
+        - "Ran undergraduate lab sessions for Computer Networks, Object-Oriented Programming and E-commerce & Web Database — teaching theory and demonstrating implementations live."
+        - "Prepared course material, conducted lab examinations, and evaluated and graded student submissions."
+        - "Debugged students' code and ran doubt-resolution sessions throughout each term."
 
   education:
     - degree: "B.Sc. in Computer Science and Engineering"
       institution: "Bangladesh University of Business and Technology (BUBT)"
       location: "Dhaka, Bangladesh"
       start: "2022-01"
-      end: "2025-12"
-      detail: "CGPA 3.81. Core coursework: Database Management Systems, Software Engineering, Object-Oriented Programming (Java), Web Database."
+      end: "2026-12"
+      detail: "CGPA 3.81, thesis defended April 2026. Core coursework: Database Management Systems, Software Engineering, Object-Oriented Programming (Java), Web Database."
 
   certifications:
     - name: "Spring Boot 4, Spring 7 & Hibernate for Beginners"
@@ -66,17 +71,22 @@ portfolio:
       credentialId: "UC-904cf6fb-22b0-4ae2-85ee-8279b6caa392"
       credentialUrl: "https://www.udemy.com/certificate/UC-904cf6fb-22b0-4ae2-85ee-8279b6caa392/"
 
+  organizations:
+    - role: "Trainer"
+      name: "Competitive Programming Community"
+      period: "2024 – 2025"
+
   awards:
     - name: "ICPC Asia Dhaka Regional Contest 2025"
-      detail: "Ranked 103rd nationally (BUBT)"
+      detail: "Ranked 103rd nationally (BUBT), December 2025"
     - name: "UAP Collaborative Contest 2025"
       detail: "2nd Place (University of Asia Pacific)"
+    - name: "BUBT Intra University Programming Contest"
+      detail: "4th position, Senior Division"
     - name: "Codeforces"
       detail: "Pupil — 500+ problems solved"
     - name: "CodeChef"
       detail: "2 Star — 100+ problems solved"
-    - name: "BUBT Intra University Programming Contest"
-      detail: "4th position, Senior Division"
 
   codingProfiles:
     - platform: "Codeforces"
@@ -95,3 +105,4 @@ portfolio:
     linkedin: "https://linkedin.com/in/khan3575"
     email: "saakibkhaan290@gmail.com"
     secondaryEmail: "sakibkhan.stud@gmail.com"
+    location: "Dhaka, Bangladesh"

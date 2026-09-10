@@ -18,6 +18,7 @@
         <span class="status" th:text="${hero.status()}">Status</span>
         <div class="cta-group">
             <a th:each="cta : ${hero.ctas()}" th:href="${cta.href()}" th:text="${cta.label()}">CTA</a>
+            <a th:if="${cv}" th:href="@{/cv/download}" download>Download CV</a>
         </div>
     </section>
 
@@ -83,11 +84,22 @@
         <h2 class="section-title">Certifications</h2>
         <ul>
             <li th:each="cert : ${certifications}">
-                <span th:text="${cert.name() + ' — ' + cert.issuer()}">Cert</span>
-                <span th:if="${cert.credentialId()}" class="meta">
-                    (<a th:if="${cert.credentialUrl()}" th:href="${cert.credentialUrl()}" th:text="${cert.credentialId()}" target="_blank" rel="noopener">ID</a><span th:unless="${cert.credentialUrl()}" th:text="${cert.credentialId()}">ID</span>)
+                <a th:if="${cert.credentialUrl()}" th:href="${cert.credentialUrl()}" th:text="${cert.name()}" target="_blank" rel="noopener">Cert</a>
+                <span th:unless="${cert.credentialUrl()}" th:text="${cert.name()}">Cert</span>
+                <span th:text="'— ' + ${cert.issuer()}">— Issuer</span>
+                <span th:if="${cert.credentialUrl()}">·
+                    <a th:href="${cert.credentialUrl()}" target="_blank" rel="noopener">View certificate &rarr;</a>
                 </span>
+                <div class="meta" th:if="${cert.credentialId()}" th:text="'Credential ID ' + ${cert.credentialId()}">ID</div>
             </li>
+        </ul>
+    </section>
+
+    <section id="organizations" class="container" th:if="${not #lists.isEmpty(organizations)}">
+        <h2 class="section-title">Organizations</h2>
+        <ul>
+            <li th:each="org : ${organizations}"
+                th:text="${org.role() + ', ' + org.name() + ' (' + org.period() + ')'}">Role</li>
         </ul>
     </section>
 
@@ -126,6 +138,11 @@
             ·
             <a th:href="${socials.github()}">GitHub</a> ·
             <a th:href="${socials.linkedin()}">LinkedIn</a>
+        </p>
+        <p class="meta" th:if="${socials.location()}" th:text="${socials.location()}">Location</p>
+        <p th:if="${cv}">
+            <a th:href="@{/cv/download}" download>Download CV (PDF)</a> ·
+            <a href="/resume">View résumé</a>
         </p>
     </section>
 </main>

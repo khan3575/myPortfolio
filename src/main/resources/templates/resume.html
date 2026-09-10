@@ -3,18 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Resume — Sakib Khan</title>
+    <title th:text="'Résumé — ' + ${hero.name()}">Résumé — Sakib Khan</title>
     <script th:src="@{/js/theme.js}"></script>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 
-<div th:replace="~{layout :: header('Sakib Khan')}"></div>
+<div th:replace="~{layout :: header(${hero.name()})}"></div>
 
 <main class="container">
-    <h1>Resume</h1>
-    <p>The downloadable resume isn't up yet — check back soon, or reach out directly in the meantime.</p>
-    <p><a href="/#contact">Contact</a> · <a href="/">Back home</a></p>
+    <h1>Résumé</h1>
+
+    <div th:if="${cv}">
+        <p class="meta">
+            <span th:text="${cv.filename}">cv.pdf</span> ·
+            <span th:text="${#numbers.formatInteger(cv.sizeBytes / 1024, 0, 'COMMA')} + ' KB'">53 KB</span> ·
+            updated <span th:text="${#temporals.format(cv.uploadedAt, 'MMMM d, yyyy')}">date</span>
+        </p>
+
+        <div class="cta-group">
+            <a th:href="@{/cv/download}" download>Download PDF</a>
+            <a th:href="@{/cv}" target="_blank" rel="noopener">Open in new tab</a>
+            <a href="/#contact">Contact</a>
+        </div>
+
+        <!-- A plain <object> rather than a viewer library: every desktop browser
+             renders a PDF natively, and the ones that can't (most phones) fall
+             back to the download link inside it. -->
+        <object class="cv-preview" th:data="@{/cv}" type="application/pdf">
+            <p>Your browser can't display the PDF inline —
+                <a th:href="@{/cv/download}">download it instead</a>.</p>
+        </object>
+    </div>
+
+    <div th:unless="${cv}">
+        <p>The downloadable résumé isn't up yet — reach out directly in the meantime.</p>
+        <p><a href="/#contact">Contact</a> · <a href="/">Back home</a></p>
+    </div>
 </main>
 
 <div th:replace="~{layout :: footer}"></div>

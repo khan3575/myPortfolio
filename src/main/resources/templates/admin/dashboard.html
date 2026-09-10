@@ -14,6 +14,30 @@
 <main class="container">
     <h1>Admin</h1>
 
+    <h2 class="section-title">CV</h2>
+
+    <p class="error-text" th:if="${cvError}" th:text="${cvError}">Error</p>
+
+    <p th:if="${cv}">
+        Live at <a th:href="@{/cv}" target="_blank" rel="noopener">/cv</a> —
+        <span th:text="${cv.filename}">cv.pdf</span>,
+        <span th:text="${#numbers.formatInteger(cv.sizeBytes / 1024, 0, 'COMMA')} + ' KB'">53 KB</span>,
+        uploaded <span th:text="${#temporals.format(cv.uploadedAt, 'MMM d, yyyy HH:mm')}">date</span>.
+    </p>
+    <p class="meta" th:unless="${cv}">No CV uploaded yet — the download buttons stay hidden until there is one.</p>
+
+    <form class="stacked" th:action="@{/admin/cv}" method="post" enctype="multipart/form-data">
+        <label>
+            <span th:text="${cv} ? 'Replace CV (PDF)' : 'Upload CV (PDF)'">Upload CV (PDF)</span>
+            <input type="file" name="cv" accept="application/pdf" required>
+        </label>
+        <button type="submit">Upload</button>
+    </form>
+
+    <form th:if="${cv}" th:action="@{/admin/cv/delete}" method="post">
+        <button type="submit">Remove CV</button>
+    </form>
+
     <h2 class="section-title">Posts</h2>
 
     <p>

@@ -3,6 +3,7 @@ package com.sakibkhan.portfolio.web;
 import com.sakibkhan.portfolio.model.Post;
 import com.sakibkhan.portfolio.repository.PostRepository;
 import com.sakibkhan.portfolio.repository.ProjectRepository;
+import com.sakibkhan.portfolio.service.CvService;
 import com.sakibkhan.portfolio.service.ImageStorageService;
 import com.sakibkhan.portfolio.service.PostAdminService;
 import com.sakibkhan.portfolio.service.ProjectAdminService;
@@ -26,19 +27,22 @@ public class AdminController {
     private final ProjectRepository projectRepository;
     private final ProjectAdminService projectAdminService;
     private final ImageStorageService imageStorageService;
+    private final CvService cvService;
 
     public AdminController(
             PostRepository postRepository,
             PostAdminService postAdminService,
             ProjectRepository projectRepository,
             ProjectAdminService projectAdminService,
-            ImageStorageService imageStorageService
+            ImageStorageService imageStorageService,
+            CvService cvService
     ) {
         this.postRepository = postRepository;
         this.postAdminService = postAdminService;
         this.projectRepository = projectRepository;
         this.projectAdminService = projectAdminService;
         this.imageStorageService = imageStorageService;
+        this.cvService = cvService;
     }
 
     @GetMapping("/login")
@@ -48,8 +52,13 @@ public class AdminController {
 
     @GetMapping
     public String dashboard(Model model) {
+        return populatedDashboard(model);
+    }
+
+    private String populatedDashboard(Model model) {
         model.addAttribute("posts", postRepository.findAllByOrderByCreatedAtDesc());
         model.addAttribute("projects", projectRepository.findAllByOrderByCreatedAtDesc());
+        model.addAttribute("cv", cvService.currentSummary().orElse(null));
         return "admin/dashboard";
     }
 
@@ -98,10 +107,35 @@ public class AdminController {
     }
 
     private String dashboardWithProjectError(Model model, String error) {
-        model.addAttribute("posts", postRepository.findAllByOrderByCreatedAtDesc());
-        model.addAttribute("projects", projectRepository.findAllByOrderByCreatedAtDesc());
         model.addAttribute("projectError", error);
-        return "admin/dashboard";
+        return populatedDashboard(model);
+    }
+
+    private String dashboardWithCvError(Model model, String error) {
+        model.addAttribute("cvError", error);
+        return populatedDashboard(model);
+    }
+
+    /**
+     * Replaces the downloadable CV. A rejected upload re-renders the dashboard
+     * with the reason rather than redirecting, so the message survives.
+     */
+    @PostMapping("/cv")
+    public String uploadCv(@RequestParam("cv") MultipartFile cv, Model model) {
+        try {
+            cvService.replace(cv);
+            return "redirect:/admin";
+        } catch (IllegalArgumentException e) {
+            return dashboardWithCvError(model, e.getMessage());
+        } catch (IOException e) {
+            return dashboardWithCvError(model, "Could not read that file. Try again.");
+        }
+    }
+
+    @PostMapping("/cv/delete")
+    public String deleteCv() {
+        cvService.deleteCurrent();
+        return "redirect:/admin";
     }
 
     @GetMapping("/posts/new")

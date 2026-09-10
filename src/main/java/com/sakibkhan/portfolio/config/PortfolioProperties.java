@@ -20,6 +20,7 @@ public record PortfolioProperties(
         List<Experience> experience,
         List<Education> education,
         List<Certification> certifications,
+        List<Organization> organizations,
         List<Award> awards,
         List<CodingProfile> codingProfiles,
         Socials socials
@@ -55,9 +56,12 @@ public record PortfolioProperties(
 
     public record Certification(String name, String issuer, String credentialId, String credentialUrl) {}
 
+    /** Communities and clubs held a role in -- the "& Organizations" half of the CV's certificates section. */
+    public record Organization(String role, String name, String period) {}
+
     public record Award(String name, String detail) {}
 
     public record CodingProfile(String platform, String url) {}
 
-    public record Socials(String github, String linkedin, String email, String secondaryEmail) {}
+    public record Socials(String github, String linkedin, String email, String secondaryEmail, String location) {}
 }

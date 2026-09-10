@@ -431,3 +431,23 @@ footer.site-footer {
         font-size: 2.6rem;
     }
 }
+
+/* The résumé page's inline PDF. Tall enough to read a page of it without
+   scrolling the viewer itself, and it collapses to the download fallback on
+   the phones whose browsers won't render a PDF in an <object> at all. */
+.cv-preview {
+    display: block;
+    width: 100%;
+    height: min(80vh, 1000px);
+    margin-top: var(--space-3);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    background: var(--glass-card-bg);
+    box-shadow: var(--glass-shadow);
+}
+
+@media (max-width: 640px) {
+    .cv-preview {
+        height: 60vh;
+    }
+}

@@ -4,6 +4,7 @@ import com.sakibkhan.portfolio.config.PortfolioProperties;
 import com.sakibkhan.portfolio.model.PostStatus;
 import com.sakibkhan.portfolio.repository.PostRepository;
 import com.sakibkhan.portfolio.repository.ProjectRepository;
+import com.sakibkhan.portfolio.service.CvService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,15 +18,18 @@ public class HomeController {
     private final PortfolioProperties portfolioProperties;
     private final ProjectRepository projectRepository;
     private final PostRepository postRepository;
+    private final CvService cvService;
 
     public HomeController(
             PortfolioProperties portfolioProperties,
             ProjectRepository projectRepository,
-            PostRepository postRepository
+            PostRepository postRepository,
+            CvService cvService
     ) {
         this.portfolioProperties = portfolioProperties;
         this.projectRepository = projectRepository;
         this.postRepository = postRepository;
+        this.cvService = cvService;
     }
 
     @GetMapping("/")
@@ -36,6 +40,7 @@ public class HomeController {
         model.addAttribute("experience", portfolioProperties.experience());
         model.addAttribute("education", portfolioProperties.education());
         model.addAttribute("certifications", portfolioProperties.certifications());
+        model.addAttribute("organizations", portfolioProperties.organizations());
         model.addAttribute("awards", portfolioProperties.awards());
         model.addAttribute("codingProfiles", portfolioProperties.codingProfiles());
         model.addAttribute("socials", portfolioProperties.socials());
@@ -44,12 +49,16 @@ public class HomeController {
         var recentPosts = postRepository.findByStatusOrderByPublishedAtDesc(
                 PostStatus.PUBLISHED, PageRequest.of(0, BLOG_PREVIEW_COUNT));
         model.addAttribute("recentPosts", recentPosts);
+        model.addAttribute("cv", cvService.currentSummary().orElse(null));
 
         return "index";
     }
 
     @GetMapping("/resume")
-    public String resume() {
+    public String resume(Model model) {
+        model.addAttribute("hero", portfolioProperties.hero());
+        model.addAttribute("socials", portfolioProperties.socials());
+        model.addAttribute("cv", cvService.currentSummary().orElse(null));
         return "resume";
     }
 }
