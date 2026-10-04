@@ -19,17 +19,20 @@ public class HomeController {
     private final ProjectRepository projectRepository;
     private final PostRepository postRepository;
     private final CvService cvService;
+    private final PersonStructuredData personStructuredData;
 
     public HomeController(
             PortfolioProperties portfolioProperties,
             ProjectRepository projectRepository,
             PostRepository postRepository,
-            CvService cvService
+            CvService cvService,
+            PersonStructuredData personStructuredData
     ) {
         this.portfolioProperties = portfolioProperties;
         this.projectRepository = projectRepository;
         this.postRepository = postRepository;
         this.cvService = cvService;
+        this.personStructuredData = personStructuredData;
     }
 
     @GetMapping("/")
@@ -50,6 +53,7 @@ public class HomeController {
                 PostStatus.PUBLISHED, PageRequest.of(0, BLOG_PREVIEW_COUNT));
         model.addAttribute("recentPosts", recentPosts);
         model.addAttribute("cv", cvService.currentSummary().orElse(null));
+        model.addAttribute("personJsonLd", personStructuredData.build());
 
         return "index";
     }

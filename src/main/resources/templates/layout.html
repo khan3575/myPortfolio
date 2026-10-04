@@ -1,5 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!--/* What a crawler or link preview reads instead of the page body: the
+         summary shown under the title in search results, the one address the
+         page should be indexed under, and the card a pasted link expands to. */-->
+    <th:block th:fragment="seo(title, description, path)">
+        <meta name="description" th:content="${description}">
+        <meta name="author" content="Sakib Khan">
+        <link rel="canonical" th:href="${siteUrl + path}">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="Sakib Khan">
+        <meta property="og:title" th:content="${title}">
+        <meta property="og:description" th:content="${description}">
+        <meta property="og:url" th:content="${siteUrl + path}">
+        <meta name="twitter:card" content="summary">
+    </th:block>
+</head>
 <body>
 
 <header class="site-header" th:fragment="header(name)">

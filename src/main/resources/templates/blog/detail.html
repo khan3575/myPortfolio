@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="${post.title + ' — Sakib Khan'}">Post</title>
+    <th:block th:replace="~{layout :: seo(${post.title + ' — Sakib Khan'}, ${#strings.isEmpty(post.summary) ? post.title : post.summary}, ${'/blog/' + post.slug})}"></th:block>
     <script th:src="@{/js/theme.js}"></script>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>

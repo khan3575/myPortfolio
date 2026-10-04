@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="${hero.name() + ' — ' + hero.title()}">Portfolio</title>
+    <th:block th:replace="~{layout :: seo(${hero.name() + ' — ' + hero.title()}, ${siteDescription}, '/')}"></th:block>
+    <!--/* The same facts as the page, in the schema.org vocabulary that search
+         engines and profile parsers read without having to guess at layout. */-->
+    <script type="application/ld+json" th:inline="javascript">[[${personJsonLd}]]</script>
     <script th:src="@{/js/theme.js}"></script>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
@@ -15,9 +19,19 @@
     <section class="hero container">
         <h1 th:text="${hero.name()}">Name</h1>
         <p th:text="${hero.title()}">Title</p>
+        <!--/* Contact details up top and spelled out: a parser looks for them
+             beside the name, and reads link text, not link targets. */-->
+        <p class="meta hero-contact">
+            <span th:if="${socials.location()}"><span th:text="${socials.location()}">Location</span> ·</span>
+            <a th:href="'mailto:' + ${socials.email()}" th:text="${socials.email()}">email</a> ·
+            <a th:href="${socials.github()}" th:text="${#strings.substringAfter(socials.github(), '://')}">github.com/user</a> ·
+            <a th:href="${socials.linkedin()}" th:text="${#strings.substringAfter(socials.linkedin(), '://')}">linkedin.com/in/user</a>
+        </p>
         <span class="status" th:text="${hero.status()}">Status</span>
         <div class="cta-group">
-            <a th:each="cta : ${hero.ctas()}" th:href="${cta.href()}" th:text="${cta.label()}">CTA</a>
+            <th:block th:each="cta : ${hero.ctas()}">
+                <a th:href="${cta.href()}" th:text="${cta.label()}">CTA</a>
+            </th:block>
             <a th:if="${cv}" th:href="@{/cv/download}" download>Download CV</a>
         </div>
     </section>
@@ -35,9 +49,11 @@
         <div class="grid">
             <div class="card" th:each="category : ${skills.categories()}">
                 <h3 th:text="${category.name()}">Category</h3>
-                <div class="tag-list">
-                    <span class="tag" th:each="item : ${category.items()}" th:text="${item}">Item</span>
-                </div>
+                <!--/* A real list: back-to-back <span>s have no whitespace between
+                     them, so their text extracts as one word ("JavaC++SQL"). */-->
+                <ul class="tag-list">
+                    <li class="tag" th:each="item : ${category.items()}" th:text="${item}">Item</li>
+                </ul>
             </div>
         </div>
     </section>
@@ -45,8 +61,12 @@
     <section id="experience" class="container">
         <h2 class="section-title">Experience</h2>
         <div class="timeline-item" th:each="job : ${experience}">
-            <h3 th:text="${job.role() + ' · ' + job.company()}">Role · Company</h3>
-            <p class="meta" th:text="${job.dateRange() + ' · ' + job.location()}">Dates · Location</p>
+            <h3 th:text="${job.role()}">Role</h3>
+            <p class="meta">
+                <strong th:text="${job.company()}">Company</strong> ·
+                <span th:text="${job.dateRange()}">Dates</span> ·
+                <span th:text="${job.location()}">Location</span>
+            </p>
             <ul>
                 <li th:each="bullet : ${job.bullets()}" th:text="${bullet}">Bullet</li>
             </ul>
@@ -65,7 +85,9 @@
                 <p class="meta" th:if="${project.liveUrl != null and project.sourceUrl != null}">
                     <a th:href="${project.sourceUrl}" target="_blank" rel="noopener">Source &rarr;</a>
                 </p>
-                <span class="tag" th:each="language : ${project.languages}" th:text="${language}">Language</span>
+                <ul class="tag-list" th:if="${not #lists.isEmpty(project.languages)}">
+                    <li class="tag" th:each="language : ${project.languages}" th:text="${language}">Language</li>
+                </ul>
             </div>
         </div>
     </section>

@@ -1,4 +1,10 @@
 portfolio:
+  # The public address, without a trailing slash -- canonical links, the
+  # sitemap and the structured data are all built from it.
+  site-url: "https://sakib-khan.com"
+  # One or two sentences for search results and link previews.
+  description: "Sakib Khan is a Java backend developer in Dhaka, Bangladesh, working with Spring Boot, Spring Security and REST APIs. Projects, experience, skills and a downloadable CV."
+
   hero:
     name: "Sakib Khan"
     title: "Java Backend Developer | Spring Boot, Spring Security"
@@ -16,7 +22,7 @@ portfolio:
       Java backend developer focused on Spring Boot, Spring Security, and REST APIs.
       Completed a six-month software engineering placement at Sonali Intellect Limited,
       building two internal Java web applications across legacy (Servlets, JSP, JSF) and
-      modern (Spring Boot) Java web stacks -- working from database design through
+      modern (Spring Boot) Java web stacks — working from database design through
       business logic to the web layer.
     highlights:
       - "Built the Asset Tagging System — custody tracking with a database-enforced audit trail and a multi-signoff transfer approval workflow (assets.sakib-khan.com)"
@@ -62,8 +68,8 @@ portfolio:
       institution: "Bangladesh University of Business and Technology (BUBT)"
       location: "Dhaka, Bangladesh"
       start: "2022-01"
-      end: "2026-04"
-      detail: "CGPA 3.81. All coursework completed December 2025, thesis defended April 2026. Core subjects: Database Management Systems, Software Engineering, Object-Oriented Programming (Java), Web Database."
+      end: "2025-12"
+      detail: "CGPA 3.81. Completed in the Fall 2025 session (December 2025). Core subjects: Database Management Systems, Software Engineering, Object-Oriented Programming (Java), Web Database."
 
   certifications:
     - name: "Spring Boot 4, Spring 7 & Hibernate for Beginners"

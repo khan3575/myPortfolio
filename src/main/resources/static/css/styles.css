@@ -243,11 +243,21 @@ h2.section-title {
     font-size: 0.9rem;
 }
 
+.meta strong {
+    color: var(--color-text);
+}
+
+.hero-contact {
+    margin-top: 0;
+}
+
 .tag-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
-    margin-top: var(--space-1);
+    margin: var(--space-1) 0 0;
+    padding: 0;
+    list-style: none;
 }
 
 .tag {

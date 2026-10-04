@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="'Résumé — ' + ${hero.name()}">Résumé — Sakib Khan</title>
+    <th:block th:replace="~{layout :: seo(${'Résumé — ' + hero.name()}, ${'Résumé (CV) of ' + hero.name() + ' — view it online or download the PDF.'}, '/resume')}"></th:block>
     <script th:src="@{/js/theme.js}"></script>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>

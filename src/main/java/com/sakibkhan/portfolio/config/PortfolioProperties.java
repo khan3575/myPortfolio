@@ -19,6 +19,8 @@ import java.util.Locale;
  */
 @ConfigurationProperties(prefix = "portfolio")
 public record PortfolioProperties(
+        String siteUrl,
+        String description,
         Hero hero,
         About about,
         Skills skills,
@@ -82,7 +84,7 @@ public record PortfolioProperties(
             String end,
             String detail
     ) {
-        /** "January 2022 – April 2026". */
+        /** "January 2022 – December 2025". */
         public String dateRange() {
             return formatMonth(start) + " – " + (end == null ? "Present" : formatMonth(end));
         }
