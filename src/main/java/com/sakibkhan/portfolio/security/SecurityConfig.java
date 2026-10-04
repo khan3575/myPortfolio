@@ -60,6 +60,10 @@ public class SecurityConfig {
         RequestMatcher inlineCv = PathPatternRequestMatcher.withDefaults().matcher("/cv");
 
         http
+                // /api/cv is called by a CI job holding a bearer token, with no
+                // session for a CSRF token to belong to. The controller checks
+                // the token itself; nothing else is exempt.
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/cv"))
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.disable())
                         .addHeaderWriter(new DelegatingRequestMatcherHeaderWriter(
