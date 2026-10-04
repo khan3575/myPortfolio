@@ -69,7 +69,7 @@ portfolio:
       location: "Dhaka, Bangladesh"
       start: "2022-01"
       end: "2025-12"
-      detail: "CGPA 3.81. Completed in the Fall 2025 session (December 2025). Core subjects: Database Management Systems, Software Engineering, Object-Oriented Programming (Java), Web Database."
+      detail: "CGPA 3.81. Completed in the Fall 2025 session (December 2025)."
 
   certifications:
     - name: "Spring Boot 4, Spring 7 & Hibernate for Beginners"
