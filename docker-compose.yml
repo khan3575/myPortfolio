@@ -1,6 +1,7 @@
 services:
   app:
-    build:  .
+    image: ghcr.io/khan3575/myportfolio:${IMAGE_TAG:-latest}
+    build: .
     restart: unless-stopped
     ports:
       - "127.0.0.1:8084:8080"
@@ -21,7 +22,7 @@ services:
         condition: service_healthy
     networks:
       - portfolio-net
-    
+
   db:
     image: postgres:16-alpine
     restart: unless-stopped

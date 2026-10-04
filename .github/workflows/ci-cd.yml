@@ -1,0 +1,32 @@
+name: Deploy on VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      APP_DIR: ${{ secrets.APP_DIR }}
+
+    steps:
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
+      - name: Pull the code and rebuild the app
+        run: |
+          ssh deploy@"$SSH_HOST" "
+            set -e
+            cd '$APP_DIR'
+            git pull --ff-only
+            docker compose up -d --build app
+            docker image prune -f
+          "
