@@ -43,6 +43,9 @@ public class PersonStructuredData {
         List<String> profiles = new ArrayList<>();
         profiles.add(portfolio.socials().github());
         profiles.add(portfolio.socials().linkedin());
+        if (portfolio.socials().medium() != null) {
+            profiles.add(portfolio.socials().medium());
+        }
         portfolio.codingProfiles().forEach(profile -> profiles.add(profile.url()));
         person.put("sameAs", profiles);
 

@@ -169,6 +169,7 @@
             ·
             <a th:href="${socials.github()}">GitHub</a> ·
             <a th:href="${socials.linkedin()}">LinkedIn</a>
+            <span th:if="${socials.medium()}"> · <a th:href="${socials.medium()}">Medium</a></span>
         </p>
         <p class="meta" th:if="${socials.location()}" th:text="${socials.location()}">Location</p>
         <p th:if="${cv}">

@@ -291,10 +291,43 @@ h2.section-title {
     border: 1px solid var(--glass-border);
 }
 
-/* On the blog list an entry spans the whole panel, where a full-width
-   16:9 picture would push the text off the screen. */
-.post-entry .post-image {
-    max-width: 420px;
+/* The blog list: one card per post, spanning the panel. With a picture the
+   card is two columns -- picture beside the text -- so a single post fills
+   the row instead of leaving half of it empty. */
+.post-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.post-card-illustrated {
+    display: grid;
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: center;
+}
+
+.post-card .post-image {
+    margin-bottom: 0;
+}
+
+.post-card h3 {
+    margin-bottom: var(--space-1);
+}
+
+.post-card .meta {
+    margin-top: 0;
+}
+
+.post-more {
+    margin-bottom: 0;
+    font-weight: 600;
+}
+
+@media (max-width: 700px) {
+    .post-card-illustrated {
+        grid-template-columns: 1fr;
+    }
 }
 
 .timeline-item ul {

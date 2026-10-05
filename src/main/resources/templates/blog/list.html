@@ -12,26 +12,48 @@
 
 <div th:replace="~{layout :: header('Sakib Khan')}"></div>
 
-<main class="container">
-    <h1>Blog</h1>
+<main>
+    <!--/* Same shape as the homepage: a header panel, then a titled panel of
+         cards -- rather than one bare heading on top of a list. */-->
+    <section class="hero container">
+        <h1>Blog</h1>
+        <p>Notes on Java, Spring Boot and backend development — how things work underneath,
+            written up as I learn them.</p>
+        <div class="cta-group" th:if="${socials.medium()}">
+            <a th:href="${socials.medium()}" target="_blank" rel="noopener">Follow on Medium ↗</a>
+        </div>
+    </section>
 
-    <p th:if="${#lists.isEmpty(entries)}">No posts yet.</p>
+    <section class="container">
+        <h2 class="section-title">All posts</h2>
 
-    <!--/* One list for both kinds of post: an article hosted elsewhere differs
-         only in opening in a new tab and saying where it leads. */-->
-    <article class="timeline-item post-entry" th:each="entry : ${entries}">
-        <a class="post-image" th:if="${entry.imageUrl}" th:href="${entry.href}" tabindex="-1" aria-hidden="true"
-           th:target="${entry.external()} ? '_blank'" th:rel="${entry.external()} ? 'noopener'">
-            <img th:src="${entry.imageUrl}" alt="" loading="lazy" referrerpolicy="no-referrer">
-        </a>
-        <h3><a th:href="${entry.href}" th:text="${entry.title}"
-               th:target="${entry.external()} ? '_blank'" th:rel="${entry.external()} ? 'noopener'">Title</a></h3>
-        <p class="meta">
-            <span th:text="${#temporals.format(entry.publishedAt, 'MMMM d, yyyy')}">Date</span>
-            <span th:if="${entry.external()}" th:text="'· on ' + ${entry.siteName} + ' ↗'">· on Medium ↗</span>
-        </p>
-        <p th:if="${entry.summary}" th:text="${entry.summary}">Summary</p>
-    </article>
+        <p th:if="${#lists.isEmpty(entries)}">No posts yet.</p>
+
+        <!--/* One list for both kinds of post: an article hosted elsewhere differs
+             only in opening in a new tab and saying where it leads. */-->
+        <div class="post-list">
+            <article class="card post-card" th:each="entry : ${entries}"
+                     th:classappend="${entry.imageUrl} ? 'post-card-illustrated'">
+                <a class="post-image" th:if="${entry.imageUrl}" th:href="${entry.href}" tabindex="-1" aria-hidden="true"
+                   th:target="${entry.external()} ? '_blank'" th:rel="${entry.external()} ? 'noopener'">
+                    <img th:src="${entry.imageUrl}" alt="" loading="lazy" referrerpolicy="no-referrer">
+                </a>
+                <div>
+                    <h3><a th:href="${entry.href}" th:text="${entry.title}"
+                           th:target="${entry.external()} ? '_blank'" th:rel="${entry.external()} ? 'noopener'">Title</a></h3>
+                    <p class="meta">
+                        <span th:text="${#temporals.format(entry.publishedAt, 'MMMM d, yyyy')}">Date</span>
+                        <span th:if="${entry.external()}" th:text="'· on ' + ${entry.siteName}">· on Medium</span>
+                    </p>
+                    <p th:if="${entry.summary}" th:text="${entry.summary}">Summary</p>
+                    <p class="post-more">
+                        <a th:href="${entry.href}" th:target="${entry.external()} ? '_blank'" th:rel="${entry.external()} ? 'noopener'"
+                           th:text="${entry.external()} ? 'Read on ' + ${entry.siteName} + ' ↗' : 'Read post →'">Read post →</a>
+                    </p>
+                </div>
+            </article>
+        </div>
+    </section>
 </main>
 
 <div th:replace="~{layout :: footer}"></div>

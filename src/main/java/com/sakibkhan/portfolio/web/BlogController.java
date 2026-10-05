@@ -1,5 +1,6 @@
 package com.sakibkhan.portfolio.web;
 
+import com.sakibkhan.portfolio.config.PortfolioProperties;
 import com.sakibkhan.portfolio.model.Post;
 import com.sakibkhan.portfolio.model.PostStatus;
 import com.sakibkhan.portfolio.repository.PostRepository;
@@ -17,16 +18,24 @@ public class BlogController {
     private final PostRepository postRepository;
     private final MarkdownService markdownService;
     private final BlogEntries blogEntries;
+    private final PortfolioProperties portfolioProperties;
 
-    public BlogController(PostRepository postRepository, MarkdownService markdownService, BlogEntries blogEntries) {
+    public BlogController(
+            PostRepository postRepository,
+            MarkdownService markdownService,
+            BlogEntries blogEntries,
+            PortfolioProperties portfolioProperties
+    ) {
         this.postRepository = postRepository;
         this.markdownService = markdownService;
         this.blogEntries = blogEntries;
+        this.portfolioProperties = portfolioProperties;
     }
 
     @GetMapping("/blog")
     public String list(Model model) {
         model.addAttribute("entries", blogEntries.all());
+        model.addAttribute("socials", portfolioProperties.socials());
         return "blog/list";
     }
 
