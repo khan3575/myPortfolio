@@ -275,6 +275,28 @@ h2.section-title {
     margin-bottom: var(--space-3);
 }
 
+/* A post's preview image, cropped to one shape so cards line up whatever
+   the article's own picture looks like. */
+.post-image {
+    display: block;
+    margin-bottom: var(--space-2);
+}
+
+.post-image img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+}
+
+/* On the blog list an entry spans the whole panel, where a full-width
+   16:9 picture would push the text off the screen. */
+.post-entry .post-image {
+    max-width: 420px;
+}
+
 .timeline-item ul {
     margin-top: var(--space-1);
     padding-left: 1.2rem;

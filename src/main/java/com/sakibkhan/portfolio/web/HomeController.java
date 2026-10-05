@@ -1,11 +1,8 @@
 package com.sakibkhan.portfolio.web;
 
 import com.sakibkhan.portfolio.config.PortfolioProperties;
-import com.sakibkhan.portfolio.model.PostStatus;
-import com.sakibkhan.portfolio.repository.PostRepository;
 import com.sakibkhan.portfolio.repository.ProjectRepository;
 import com.sakibkhan.portfolio.service.CvService;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,20 +14,20 @@ public class HomeController {
 
     private final PortfolioProperties portfolioProperties;
     private final ProjectRepository projectRepository;
-    private final PostRepository postRepository;
+    private final BlogEntries blogEntries;
     private final CvService cvService;
     private final PersonStructuredData personStructuredData;
 
     public HomeController(
             PortfolioProperties portfolioProperties,
             ProjectRepository projectRepository,
-            PostRepository postRepository,
+            BlogEntries blogEntries,
             CvService cvService,
             PersonStructuredData personStructuredData
     ) {
         this.portfolioProperties = portfolioProperties;
         this.projectRepository = projectRepository;
-        this.postRepository = postRepository;
+        this.blogEntries = blogEntries;
         this.cvService = cvService;
         this.personStructuredData = personStructuredData;
     }
@@ -49,9 +46,7 @@ public class HomeController {
         model.addAttribute("socials", portfolioProperties.socials());
         model.addAttribute("projects", projectRepository.findAllByOrderByCreatedAtDesc());
 
-        var recentPosts = postRepository.findByStatusOrderByPublishedAtDesc(
-                PostStatus.PUBLISHED, PageRequest.of(0, BLOG_PREVIEW_COUNT));
-        model.addAttribute("recentPosts", recentPosts);
+        model.addAttribute("recentPosts", blogEntries.latest(BLOG_PREVIEW_COUNT));
         model.addAttribute("cv", cvService.currentSummary().orElse(null));
         model.addAttribute("personJsonLd", personStructuredData.build());
 

@@ -144,10 +144,19 @@
     <section id="blog" class="container" th:if="${not #lists.isEmpty(recentPosts)}">
         <h2 class="section-title">Latest posts</h2>
         <div class="grid">
-            <div class="card" th:each="post : ${recentPosts}">
-                <h3><a th:href="@{'/blog/' + ${post.slug}}" th:text="${post.title}">Title</a></h3>
-                <p th:text="${post.summary}">Summary</p>
-            </div>
+            <article class="card" th:each="entry : ${recentPosts}">
+                <a class="post-image" th:if="${entry.imageUrl}" th:href="${entry.href}" tabindex="-1" aria-hidden="true"
+                   th:target="${entry.external()} ? '_blank'" th:rel="${entry.external()} ? 'noopener'">
+                    <img th:src="${entry.imageUrl}" alt="" loading="lazy" referrerpolicy="no-referrer">
+                </a>
+                <h3><a th:href="${entry.href}" th:text="${entry.title}"
+                       th:target="${entry.external()} ? '_blank'" th:rel="${entry.external()} ? 'noopener'">Title</a></h3>
+                <p class="meta">
+                    <span th:text="${#temporals.format(entry.publishedAt, 'MMMM d, yyyy')}">Date</span>
+                    <span th:if="${entry.external()}" th:text="'· on ' + ${entry.siteName} + ' ↗'">· on Medium ↗</span>
+                </p>
+                <p th:if="${entry.summary}" th:text="${entry.summary}">Summary</p>
+            </article>
         </div>
         <p><a href="/blog">All posts &rarr;</a></p>
     </section>

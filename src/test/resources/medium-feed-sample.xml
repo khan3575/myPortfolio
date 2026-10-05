@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title><![CDATA[Stories by Example Author on Medium]]></title>
+        <link>https://medium.com/@example?source=rss-abc------2</link>
+        <item>
+            <title><![CDATA[How the JVM Runs Your Code & Why It Matters]]></title>
+            <link>https://medium.com/@example/how-the-jvm-runs-your-code-1a2b3c?source=rss-abc------2</link>
+            <guid isPermaLink="false">https://medium.com/p/1a2b3c</guid>
+            <category><![CDATA[java]]></category>
+            <dc:creator><![CDATA[Example Author]]></dc:creator>
+            <pubDate>Thu, 01 Oct 2026 07:26:00 GMT</pubDate>
+            <content:encoded><![CDATA[<figure><img alt="" src="https://cdn-images-1.medium.com/max/1024/cover.png" /><figcaption>A caption that is not the opening line</figcaption></figure><p>Hi, I&#x2019;m an <strong>example</strong> author. This first paragraph is long enough that the summary has to be cut somewhere in the middle of it, and it should be cut at a word boundary rather than halfway through one, with an ellipsis added to show there is more to read.</p><p>Second paragraph.</p><img src="https://medium.com/_/stat?event=post.clientViewed&referrerSource=full_rss&postId=1a2b3c" width="1" height="1" alt="">]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[A Short Note Without Pictures]]></title>
+            <link>https://medium.com/@example/a-short-note-4d5e6f?source=rss-abc------2</link>
+            <guid isPermaLink="false">https://medium.com/p/4d5e6f</guid>
+            <pubDate>Mon, 14 Sep 2026 18:00:00 GMT</pubDate>
+            <content:encoded><![CDATA[<p>Just a few words.</p><img src="https://medium.com/_/stat?event=post.clientViewed&referrerSource=full_rss&postId=4d5e6f" width="1" height="1" alt="">]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[An entry with no date is skipped]]></title>
+            <link>https://medium.com/@example/no-date-7g8h9i</link>
+        </item>
+    </channel>
+</rss>

@@ -15,13 +15,23 @@
 <main class="container">
     <h1>Blog</h1>
 
-    <p th:if="${#lists.isEmpty(posts)}">No posts yet.</p>
+    <p th:if="${#lists.isEmpty(entries)}">No posts yet.</p>
 
-    <div class="timeline-item" th:each="post : ${posts}">
-        <h3><a th:href="@{'/blog/' + ${post.slug}}" th:text="${post.title}">Title</a></h3>
-        <p class="meta" th:text="${#temporals.format(post.publishedAt, 'MMMM d, yyyy')}">Date</p>
-        <p th:text="${post.summary}">Summary</p>
-    </div>
+    <!--/* One list for both kinds of post: an article hosted elsewhere differs
+         only in opening in a new tab and saying where it leads. */-->
+    <article class="timeline-item post-entry" th:each="entry : ${entries}">
+        <a class="post-image" th:if="${entry.imageUrl}" th:href="${entry.href}" tabindex="-1" aria-hidden="true"
+           th:target="${entry.external()} ? '_blank'" th:rel="${entry.external()} ? 'noopener'">
+            <img th:src="${entry.imageUrl}" alt="" loading="lazy" referrerpolicy="no-referrer">
+        </a>
+        <h3><a th:href="${entry.href}" th:text="${entry.title}"
+               th:target="${entry.external()} ? '_blank'" th:rel="${entry.external()} ? 'noopener'">Title</a></h3>
+        <p class="meta">
+            <span th:text="${#temporals.format(entry.publishedAt, 'MMMM d, yyyy')}">Date</span>
+            <span th:if="${entry.external()}" th:text="'· on ' + ${entry.siteName} + ' ↗'">· on Medium ↗</span>
+        </p>
+        <p th:if="${entry.summary}" th:text="${entry.summary}">Summary</p>
+    </article>
 </main>
 
 <div th:replace="~{layout :: footer}"></div>

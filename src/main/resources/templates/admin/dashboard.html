@@ -77,6 +77,63 @@
         </tbody>
     </table>
 
+    <h2 class="section-title" id="external-posts">Articles on other sites</h2>
+
+    <p class="meta">Medium posts are imported from your feed every hour and shown on the blog as cards that link
+        out. Editing a card keeps your wording; hiding one takes it off the site without losing it.</p>
+
+    <p class="error-text" th:if="${externalPostError}" th:text="${externalPostError}">Error</p>
+    <p th:if="${externalPostNotice}" th:text="${externalPostNotice}">Notice</p>
+
+    <div class="actions">
+        <form th:action="@{/admin/external-posts/refresh}" method="post">
+            <button type="submit">Refresh from Medium now</button>
+        </form>
+        <a href="/admin/external-posts/new">+ Add a link by hand</a>
+    </div>
+
+    <p th:if="${#lists.isEmpty(externalPosts)}">Nothing imported yet.</p>
+
+    <table th:if="${not #lists.isEmpty(externalPosts)}">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>From</th>
+            <th>Published</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ext : ${externalPosts}">
+            <td><a th:href="${ext.url}" th:text="${ext.title}" target="_blank" rel="noopener">Title</a></td>
+            <td th:text="${ext.source.name() == 'MEDIUM' ? 'Medium' : 'Added by hand'}">Medium</td>
+            <td th:text="${#temporals.format(ext.publishedAt, 'MMM d, yyyy')}">Date</td>
+            <td>
+                <span th:text="${ext.hidden ? 'Hidden' : 'Visible'}">Visible</span><span
+                    th:if="${ext.source.name() == 'MEDIUM' and ext.locked}">, edited</span>
+            </td>
+            <td class="actions">
+                <a th:href="@{'/admin/external-posts/' + ${ext.id} + '/edit'}">Edit</a>
+
+                <form th:unless="${ext.hidden}" th:action="@{'/admin/external-posts/' + ${ext.id} + '/hide'}" method="post">
+                    <button type="submit">Hide</button>
+                </form>
+                <form th:if="${ext.hidden}" th:action="@{'/admin/external-posts/' + ${ext.id} + '/show'}" method="post">
+                    <button type="submit">Show</button>
+                </form>
+
+                <form th:if="${ext.source.name() == 'MEDIUM' and ext.locked}" th:action="@{'/admin/external-posts/' + ${ext.id} + '/unlock'}" method="post">
+                    <button type="submit">Reset to feed</button>
+                </form>
+                <form th:if="${ext.source.name() == 'MANUAL'}" th:action="@{'/admin/external-posts/' + ${ext.id} + '/delete'}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
     <h2 class="section-title">Projects</h2>
 
     <p class="error-text" th:if="${projectError}" th:text="${projectError}">Error</p>

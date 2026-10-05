@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${externalPost == null ? 'Add an article link' : 'Edit article card'}">Article link</title>
+    <script th:src="@{/js/theme.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div th:replace="~{layout :: header('Sakib Khan')}"></div>
+
+<main class="container">
+    <h1 th:text="${externalPost == null ? 'Add an article link' : 'Edit article card'}">Article link</h1>
+
+    <p class="meta" th:if="${externalPost == null}">For an article published somewhere else. Medium posts are
+        imported on their own — this is for anything the feed doesn't cover.</p>
+    <p class="meta" th:if="${externalPost != null and externalPost.source.name() == 'MEDIUM'}">Saving keeps your
+        wording: Medium's feed will stop updating this card. "Reset to feed" on the dashboard undoes that.</p>
+
+    <p class="error-text" th:if="${error}" th:text="${error}">Error</p>
+
+    <form class="stacked" th:action="@{${formAction}}" method="post">
+        <label th:if="${externalPost == null}">
+            Article link
+            <input type="url" name="url" th:value="${urlInput}" placeholder="https://medium.com/@you/your-article" required>
+        </label>
+        <p th:if="${externalPost != null}">
+            <a th:href="${externalPost.url}" th:text="${externalPost.url}" target="_blank" rel="noopener">link</a>
+        </p>
+        <label>
+            Title
+            <input type="text" name="title" th:value="${titleInput}" maxlength="255" required>
+        </label>
+        <label>
+            Summary
+            <input type="text" name="summary" th:value="${summaryInput}" maxlength="500" placeholder="A sentence or two shown on the card (optional)">
+        </label>
+        <label>
+            Image link
+            <input type="url" name="imageUrl" th:value="${imageUrlInput}" placeholder="https://… (optional)">
+        </label>
+        <label>
+            Published on
+            <input type="date" name="publishedOn" th:value="${publishedOnInput}">
+        </label>
+        <button type="submit">Save</button>
+    </form>
+
+    <p><a href="/admin#external-posts">&larr; Back to admin</a></p>
+</main>
+
+<div th:replace="~{layout :: footer}"></div>
+
+</body>
+</html>

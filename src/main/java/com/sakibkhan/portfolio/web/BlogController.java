@@ -16,15 +16,17 @@ public class BlogController {
 
     private final PostRepository postRepository;
     private final MarkdownService markdownService;
+    private final BlogEntries blogEntries;
 
-    public BlogController(PostRepository postRepository, MarkdownService markdownService) {
+    public BlogController(PostRepository postRepository, MarkdownService markdownService, BlogEntries blogEntries) {
         this.postRepository = postRepository;
         this.markdownService = markdownService;
+        this.blogEntries = blogEntries;
     }
 
     @GetMapping("/blog")
     public String list(Model model) {
-        model.addAttribute("posts", postRepository.findByStatusOrderByPublishedAtDesc(PostStatus.PUBLISHED));
+        model.addAttribute("entries", blogEntries.all());
         return "blog/list";
     }
 

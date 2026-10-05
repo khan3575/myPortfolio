@@ -4,6 +4,7 @@ import com.sakibkhan.portfolio.model.Post;
 import com.sakibkhan.portfolio.repository.PostRepository;
 import com.sakibkhan.portfolio.repository.ProjectRepository;
 import com.sakibkhan.portfolio.service.CvService;
+import com.sakibkhan.portfolio.service.ExternalPostService;
 import com.sakibkhan.portfolio.service.ImageStorageService;
 import com.sakibkhan.portfolio.service.PostAdminService;
 import com.sakibkhan.portfolio.service.ProjectAdminService;
@@ -28,6 +29,7 @@ public class AdminController {
     private final ProjectAdminService projectAdminService;
     private final ImageStorageService imageStorageService;
     private final CvService cvService;
+    private final ExternalPostService externalPostService;
 
     public AdminController(
             PostRepository postRepository,
@@ -35,7 +37,8 @@ public class AdminController {
             ProjectRepository projectRepository,
             ProjectAdminService projectAdminService,
             ImageStorageService imageStorageService,
-            CvService cvService
+            CvService cvService,
+            ExternalPostService externalPostService
     ) {
         this.postRepository = postRepository;
         this.postAdminService = postAdminService;
@@ -43,6 +46,7 @@ public class AdminController {
         this.projectAdminService = projectAdminService;
         this.imageStorageService = imageStorageService;
         this.cvService = cvService;
+        this.externalPostService = externalPostService;
     }
 
     @GetMapping("/login")
@@ -58,6 +62,7 @@ public class AdminController {
     private String populatedDashboard(Model model) {
         model.addAttribute("posts", postRepository.findAllByOrderByCreatedAtDesc());
         model.addAttribute("projects", projectRepository.findAllByOrderByCreatedAtDesc());
+        model.addAttribute("externalPosts", externalPostService.all());
         model.addAttribute("cv", cvService.currentSummary().orElse(null));
         return "admin/dashboard";
     }
