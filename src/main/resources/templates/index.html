@@ -82,8 +82,10 @@
                     <span th:unless="${project.primaryUrl}" th:text="${project.name}">Project</span>
                 </h3>
                 <p th:text="${project.description}">Description</p>
-                <p class="meta" th:if="${project.liveUrl != null and project.sourceUrl != null}">
-                    <a th:href="${project.sourceUrl}" target="_blank" rel="noopener">Source &rarr;</a>
+                <p class="meta" th:if="${project.liveUrl != null or project.sourceUrl != null}">
+                    <a th:if="${project.liveUrl}" th:href="${project.liveUrl}" target="_blank" rel="noopener">Live demo &rarr;</a>
+                    <span th:if="${project.liveUrl != null and project.sourceUrl != null}"> &middot; </span>
+                    <a th:if="${project.sourceUrl}" th:href="${project.sourceUrl}" target="_blank" rel="noopener">Source code &rarr;</a>
                 </p>
                 <ul class="tag-list" th:if="${not #lists.isEmpty(project.languages)}">
                     <li class="tag" th:each="language : ${project.languages}" th:text="${language}">Language</li>

@@ -79,7 +79,7 @@ public class ProjectAdminService {
 
         Project project = Project.builder()
                 .name(repoData.name())
-                .description(repoData.description())
+                .description(ProjectText.split(repoData.description()).description())
                 .sourceUrl(repoData.htmlUrl())
                 .liveUrl(normalizeUrl(rawLiveUrl))
                 .languages(languagesFor(owner, repo, repoData.language()))
@@ -105,7 +105,9 @@ public class ProjectAdminService {
             throw new IllegalArgumentException("Name is required.");
         }
 
-        String sourceUrl = normalizeRepoUrl(rawRepoUrl);
+        // A "github-url: ..." token pasted into the description is the source link, not prose.
+        ProjectText.Parts text = ProjectText.split(description);
+        String sourceUrl = normalizeRepoUrl(rawRepoUrl != null && !rawRepoUrl.isBlank() ? rawRepoUrl : text.sourceUrl());
         String liveUrl = normalizeUrl(rawLiveUrl);
         if (sourceUrl == null && liveUrl == null) {
             throw new IllegalArgumentException("Give at least one link — a GitHub repo, a live URL, or both.");
@@ -116,7 +118,7 @@ public class ProjectAdminService {
 
         Project project = Project.builder()
                 .name(name.trim())
-                .description(blankToNull(description))
+                .description(text.description())
                 .languages(parseLanguages(rawLanguages))
                 .sourceUrl(sourceUrl)
                 .liveUrl(liveUrl)
