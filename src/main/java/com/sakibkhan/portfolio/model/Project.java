@@ -49,6 +49,22 @@ public class Project {
     @Builder.Default
     private List<String> languages = new ArrayList<>();
 
+    /** Short bullets on what is notable about the project, in display order. */
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "project_highlights", joinColumns = @JoinColumn(name = "project_id"))
+    @OrderColumn(name = "position")
+    @Column(name = "highlight", length = 500, nullable = false)
+    @Builder.Default
+    private List<String> highlights = new ArrayList<>();
+
+    /** Public login details for a project with a demo, shown as typed. Null when there is none. */
+    @Column(name = "demo_login", length = 500)
+    private String demoLogin;
+
+    /** Site-relative path (or full URL) of a screenshot for the card. Null when there is none. */
+    @Column(name = "image_url", length = 500)
+    private String imageUrl;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

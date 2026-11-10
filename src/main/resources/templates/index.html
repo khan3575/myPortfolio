@@ -81,7 +81,15 @@
                     <a th:if="${project.primaryUrl}" th:href="${project.primaryUrl}" th:text="${project.name}" target="_blank" rel="noopener">Project</a>
                     <span th:unless="${project.primaryUrl}" th:text="${project.name}">Project</span>
                 </h3>
+                <img class="project-shot" th:if="${project.imageUrl}" th:src="${project.imageUrl}"
+                     th:alt="${project.name + ' screenshot'}" loading="lazy" width="1440" height="900">
                 <p th:text="${project.description}">Description</p>
+                <ul class="project-highlights" th:if="${not #lists.isEmpty(project.highlights)}">
+                    <li th:each="highlight : ${project.highlights}" th:text="${highlight}">Highlight</li>
+                </ul>
+                <p class="meta project-demo" th:if="${project.demoLogin}">
+                    <strong>Try the demo:</strong> <span th:text="${project.demoLogin}">login</span>
+                </p>
                 <p class="meta" th:if="${project.liveUrl != null or project.sourceUrl != null}">
                     <a th:if="${project.liveUrl}" th:href="${project.liveUrl}" target="_blank" rel="noopener">Live demo &rarr;</a>
                     <span th:if="${project.liveUrl != null and project.sourceUrl != null}"> &middot; </span>
