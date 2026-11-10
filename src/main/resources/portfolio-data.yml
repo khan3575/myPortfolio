@@ -26,7 +26,6 @@ portfolio:
       business logic to the web layer.
     highlights:
       - "Built the Asset Tagging System — custody tracking with a database-enforced audit trail and a multi-signoff transfer approval workflow (assets.sakib-khan.com)"
-      - "Six-month Software Engineer internship at Sonali Intellect Limited, shipping two internal Java web applications"
       - "Codeforces Pupil (500+ problems solved), ICPC Asia Dhaka Regional 2025 — ranked 103rd nationally"
       - "B.Sc. Computer Science and Engineering, BUBT — CGPA 3.81"
 
@@ -115,5 +114,4 @@ portfolio:
     linkedin: "https://linkedin.com/in/khan3575"
     medium: "https://medium.com/@sakibkhan.stud"
     email: "saakibkhaan290@gmail.com"
-    secondaryEmail: "sakibkhan.stud@gmail.com"
     location: "Dhaka, Bangladesh"
