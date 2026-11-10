@@ -35,11 +35,15 @@ portfolio:
       - name: "Languages"
         items: ["Java", "C++", "SQL"]
       - name: "Backend"
-        items: ["Spring Boot", "Spring Security", "Spring Data JPA", "Spring AOP", "Hibernate", "Jakarta Servlets & JSP", "JSF (Mojarra)", "REST APIs"]
+        items: ["Spring Boot", "Spring Security", "Spring Data JPA", "Spring AOP", "Hibernate", "Jakarta Servlets & JSP", "JSF (Mojarra)", "REST APIs", "Microservices"]
       - name: "Frontend"
         items: ["HTML", "CSS", "Bootstrap", "Thymeleaf"]
       - name: "Databases"
         items: ["MySQL", "JDBC", "Flyway"]
+      - name: "DevOps & Deployment"
+        items: ["GitHub Actions (CI/CD)", "Docker Compose", "Nginx", "SSL/Let's Encrypt", "Cloudflare DNS", "Linux VPS (Hetzner)"]
+      - name: "Testing"
+        items: ["JUnit", "Testcontainers"]
       - name: "Tools & Platforms"
         items: ["Git", "Maven", "Gradle", "Tomcat", "Docker", "Linux", "Postman"]
 

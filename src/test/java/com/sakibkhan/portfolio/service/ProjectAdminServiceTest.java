@@ -55,4 +55,16 @@ class ProjectAdminServiceTest {
 
         assertThat(saved.getDescription()).doesNotContain("github-url");
     }
+
+    @Test
+    void typedTagsGetTheirProperSpelling() {
+        ProjectRepository repository = mock(ProjectRepository.class);
+        when(repository.save(any(Project.class))).thenAnswer(call -> call.getArgument(0));
+        ProjectAdminService service = new ProjectAdminService(mock(GitHubApiClient.class), repository);
+
+        Project saved = service.addManual("X", null, "Java, Mysql, spring boot, mysql",
+                null, "https://example.com");
+
+        assertThat(saved.getLanguages()).containsExactly("Java", "MySQL", "Spring Boot");
+    }
 }

@@ -12,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,6 +31,11 @@ public class ProjectAdminService {
 
     /** Matches the column width in {@code project_languages}. */
     private static final int MAX_LANGUAGE_LENGTH = 100;
+
+    /** Product names with a fixed spelling; typed tags are matched to these ignoring case. */
+    private static final Map<String, String> TAG_SPELLINGS = Map.of(
+            "mysql", "MySQL",
+            "spring boot", "Spring Boot");
 
     private final GitHubApiClient apiClient;
     private final ProjectRepository projectRepository;
@@ -169,7 +176,7 @@ public class ProjectAdminService {
             if (part.length() > MAX_LANGUAGE_LENGTH) {
                 throw new IllegalArgumentException("Language names are capped at " + MAX_LANGUAGE_LENGTH + " characters.");
             }
-            languages.add(part);
+            languages.add(TAG_SPELLINGS.getOrDefault(part.toLowerCase(Locale.ROOT), part));
         }
         return languages;
     }
