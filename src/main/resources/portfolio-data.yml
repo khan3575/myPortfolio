@@ -55,8 +55,8 @@ portfolio:
       end: "2026-09"
       bullets:
         - "Built two internal Java web applications over a six-month placement — the Asset Tagging System and a Task Management System — working across database design, business logic and the web layer."
-        - "Refactored between Spring Data JPA and hand-written JDBC/DAO implementations across supervisor-led review cycles, building a working understanding of both the modern abstraction and the mechanics underneath it."
-        - "Worked to the team's existing code conventions in a Git-based workflow, deploying to Apache Tomcat with manual JAR and dependency management."
+        - "Implemented the same data layer both with Spring Data JPA and with hand-written JDBC/DAO during supervisor code reviews."
+        - "Worked to the team's existing code conventions in a Git-based workflow, and packaged and deployed the applications to Apache Tomcat."
     - role: "Teaching Assistant"
       company: "Bangladesh University of Business and Technology"
       location: "Dhaka, Bangladesh"
